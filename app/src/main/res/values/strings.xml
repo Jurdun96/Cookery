@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Cookery</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_creator">CreatorActivity</string>
+    <string name="title_activity_recipes">RecipesActivity</string>
+    <string name="title_activity_favourites">FavouritesActivity</string>
+</resources>
