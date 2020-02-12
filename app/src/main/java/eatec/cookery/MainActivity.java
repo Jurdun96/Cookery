@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //TODO REFRESH HOME SCREEN ONCE LOGGED IN.
         final FloatingActionButton searchButt = (FloatingActionButton) findViewById(R.id.SearchButton);
         final FloatingActionButton creatorButt = (FloatingActionButton) findViewById(R.id.CreatorButton);
         final FloatingActionButton favouriteButt = (FloatingActionButton) findViewById(R.id.FavouritesButton);

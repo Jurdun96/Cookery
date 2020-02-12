@@ -24,13 +24,21 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="452dp">
+        android:layout_height="404dp">
 
         <LinearLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/signinText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign In"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -74,19 +82,44 @@
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/PasswordForgot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Forgot Password?"
+                android:textAlignment="textEnd" />
+
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
         android:id="@+id/AlternativeMethods"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="287dp"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/altMethodsDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="----- Or -----"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/moreinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Login with your social media account"
+            android:textAlignment="center" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/GoogleSignin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"></com.google.android.gms.common.SignInButton>
+            android:layout_margin="20dp">
+        </com.google.android.gms.common.SignInButton>
     </LinearLayout>
+
 </LinearLayout>
