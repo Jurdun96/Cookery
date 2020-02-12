@@ -3,12 +3,8 @@ package eatec.cookery;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
     protected Boolean isON = false;
@@ -21,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         final FloatingActionButton creatorButt = (FloatingActionButton) findViewById(R.id.CreatorButton);
         final FloatingActionButton favouriteButt = (FloatingActionButton) findViewById(R.id.FavouritesButton);
         final FloatingActionButton navButt = (FloatingActionButton) findViewById(R.id.NavigationButton);
-
+        final FloatingActionButton loginButt = (FloatingActionButton) findViewById(R.id.LoginButton);
         searchButt.setVisibility(View.INVISIBLE);
         creatorButt.setVisibility(View.INVISIBLE);
         favouriteButt.setVisibility(View.INVISIBLE);
@@ -59,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), FavouritesActivity.class);
+                view.getContext().startActivity(intent);
+            }});
+        loginButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), LoginActivity.class);
                 view.getContext().startActivity(intent);
             }});
     }
