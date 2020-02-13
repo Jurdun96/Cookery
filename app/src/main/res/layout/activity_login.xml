@@ -63,7 +63,7 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
+                    android:hint="Password"
                     android:imeActionId="6"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
@@ -79,8 +79,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
+                android:onClick="attemptLogin"
+                android:text="Sign in"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/createAccountButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:onClick="openCreateAccount"
+                android:text="Create Account" />
 
             <TextView
                 android:id="@+id/PasswordForgot"
@@ -88,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Forgot Password?"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textStart" />
 
         </LinearLayout>
     </ScrollView>

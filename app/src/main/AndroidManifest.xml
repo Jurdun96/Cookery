@@ -38,8 +38,12 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".GoogleSignInActivity"></activity>
+            android:label="@string/title_activity_login"
+            android:noHistory="true" />
+        <activity
+            android:name=".GoogleSignInActivity"
+            android:noHistory="true" />
+        <activity android:name=".createAccountActivity"></activity>
     </application>
 
 </manifest>

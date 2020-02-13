@@ -4,61 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="eatec.cookery.MainActivity">
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/LoginButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="right|top"
-        app:srcCompat="@drawable/user" />
 
     <include
         android:id="@+id/include"
-        layout="@layout/content_main" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/NavigationButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="left|bottom"
-        app:srcCompat="@android:drawable/ic_menu_more" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/SearchButton"
+        layout="@layout/content_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-        android:clickable="true"
-        app:elevation="0dp"
-        app:layout_anchor="@+id/NavigationButton"
-        app:layout_anchorGravity="right|center"
-        app:srcCompat="@drawable/search_button" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/CreatorButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="175dp"
-        android:clickable="true"
-        app:layout_anchor="@+id/SearchButton"
-        app:layout_anchorGravity="right|center"
-        app:srcCompat="@drawable/edit_button" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/FavouritesButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="250dp"
-        android:clickable="true"
-        app:layout_anchor="@+id/CreatorButton"
-        app:layout_anchorGravity="right|center"
-        app:srcCompat="@drawable/star_button" />
+        android:layout_height="match_parent" />
 
 </android.support.design.widget.CoordinatorLayout>

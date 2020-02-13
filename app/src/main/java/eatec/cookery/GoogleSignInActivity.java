@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -28,7 +29,6 @@ public class GoogleSignInActivity extends MainActivity implements
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
-
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
@@ -57,8 +57,10 @@ public class GoogleSignInActivity extends MainActivity implements
 
         //Automatic signin when activity is loaded
         signIn();
+        Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
         //Navigate back to home page
-        setContentView(R.layout.activity_main);
+        finish();
+        //setContentView(R.layout.activity_main);
     }
 
     // [START on_start_check_user]
