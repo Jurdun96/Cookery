@@ -43,7 +43,8 @@
         <activity
             android:name=".GoogleSignInActivity"
             android:noHistory="true" />
-        <activity android:name=".createAccountActivity"></activity>
+        <activity android:name=".createAccountActivity" />
+        <activity android:name=".ProfileActivity"></activity>
     </application>
 
 </manifest>
