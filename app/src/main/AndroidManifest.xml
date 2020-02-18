@@ -44,7 +44,11 @@
             android:name=".GoogleSignInActivity"
             android:noHistory="true" />
         <activity android:name=".createAccountActivity" />
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ProfileActivity" />
+        <activity
+            android:name=".SocialActivity"
+            android:label="@string/title_activity_social"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

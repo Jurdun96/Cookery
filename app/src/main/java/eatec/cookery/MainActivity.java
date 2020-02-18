@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, CreatorActivity.class));
     }
     public void openSocialActivity(View view) {
-        //startActivity(new Intent(MainActivity.this, CreatorActivity.class));
+        startActivity(new Intent(MainActivity.this, SocialActivity.class));
     }
     public void openRecipesActivity(View view) {
         startActivity(new Intent(MainActivity.this, RecipesActivity.class));
