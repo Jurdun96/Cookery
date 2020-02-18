@@ -1,45 +1,47 @@
 package eatec.cookery;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreatorActivity extends AppCompatActivity {
 
-    ListView recipeList;
-    String title[] = new String[32];
-    String description[] = new String[32];
-    int images[] = new int[32];
+    //variables used in this activity
+    ListView viewRecipeList;
+    List<recipe> listRecipesList;
     LinearLayout newRecipeDialog;
+
+
+    //Firebase Database
+    private DatabaseReference Database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creator);
 
-        //Sample Row
-        title[0] = "Test Title";
-        description[0] = "Test description";
-        images[0] = R.drawable.cookery_logo_round;
-
-        recipeList = findViewById(R.id.recipeList);
-
-        myAdapter adapter = new myAdapter(this, title, description, images);
-        recipeList.setAdapter(adapter);
-        recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        Database = FirebaseDatabase.getInstance().getReference("recipes");
+        //Init List
+        listRecipesList = new ArrayList<>();
+        //Init ListView
+        viewRecipeList = findViewById(R.id.recipeList);
+        //Items in recipe list clickable
+        viewRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(CreatorActivity.this, "HAHAAAAA", Toast.LENGTH_SHORT).show();
@@ -47,45 +49,14 @@ public class CreatorActivity extends AppCompatActivity {
         });
     }
 
-    class myAdapter extends ArrayAdapter<String> {
-        Context context;
-        String rTitle[];
-        String rDescription[];
-        int rImgs[];
 
-        myAdapter (Context c, String title[], String description[], int imgs[]) {
-            super(c, R.layout.row, R.id.titleText, title);
-            this.context = c;
-            this.rTitle = title;
-            this.rDescription = description;
-            this.rImgs = imgs;
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.row, parent, false);
-            ImageView images = row.findViewById(R.id.rowImage);
-            TextView rowTitle = row.findViewById(R.id.titleText);
-            TextView rowDescription = row.findViewById(R.id.descriptionText);
-
-            images.setImageResource(rImgs[position]);
-            rowTitle.setText(rTitle[position]);
-            rowDescription.setText(rDescription[position]);
-
-            return row;
-        }
-    }
-
-
-
+    //addNewRecipe: Opens the dialog box to allow the user to enter a recipe name and description.
     protected void addNewRecipe(View view) {
         newRecipeDialog = findViewById(R.id.newRecipeDialog);
-
+        //Dialog visible
         newRecipeDialog.setVisibility(View.VISIBLE);
-
-        Button addRecipeButton = (Button) findViewById(R.id.addRecipeButton);
+        //Button to confirm the name and description
+        final Button addRecipeButton = (Button) findViewById(R.id.addRecipeButton);
         addRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,23 +66,45 @@ public class CreatorActivity extends AppCompatActivity {
                 final String recipeTitleText = recipeTitle.getText().toString();
                 final String recipeDescriptionText = recipeDescription.getText().toString();
 
-                updateRecipes(recipeTitleText, recipeDescriptionText);
+                addToDatabase(recipeTitleText, recipeDescriptionText);
             }});
-
     }
 
-    protected void updateRecipes(String T, String D) {
-        for (int i = 0; i < 32; i++) {
-            if (title[i] == null) {
-                title[i] = T;
-                description[i] = D;
-                images[i] = R.drawable.cookery_logo_round;
-                break;
-            }
-        }
-        myAdapter adapter = new myAdapter(this, title, description, images);
-        recipeList.setAdapter(adapter);
+    //Add new recipe to database;
+    protected void addToDatabase(String title, String description){
+        String recipeID = Database.push().getKey();
+        recipe newRecipe = new recipe(recipeID, title, description, "R.drawable.cookery_logo_round");
+        Database.child(recipeID).setValue(newRecipe);
 
         newRecipeDialog.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Clear previous list
+                listRecipesList.clear();
+
+                //Iterate through the nodes
+                for(DataSnapshot recipeSnapshot : dataSnapshot.getChildren()){
+                    //get recipe
+                    recipe recipe = recipeSnapshot.getValue(recipe.class);
+                    //add to list
+                    listRecipesList.add(recipe);
+                }
+                //create Adapter
+                recipeList recipesAdapter = new recipeList(CreatorActivity.this, listRecipesList);
+                //Attatch adapter to listview
+                viewRecipeList.setAdapter(recipesAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
