@@ -50,8 +50,6 @@ public class LoginActivity extends AppCompatActivity {
             }});
     }
 
-    //CHECKS FOR USER INPUT
-
     private void authenticateInput(String email, String password) {
         if (checkExistingLogin() == false) {
             if (checkEmail(email) == true) {
@@ -60,10 +58,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         } else {
-            Toast.makeText(this, "User already logged in", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "user already logged in", Toast.LENGTH_SHORT).show();
         }
     }
-
     private Boolean checkExistingLogin() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -73,7 +70,6 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
     }
-
     private Boolean checkEmail(String email) {
         if (email != null) {return true;} else {
             Toast.makeText(this, "Email address is no valid", Toast.LENGTH_SHORT).show();
@@ -81,14 +77,12 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-
     private Boolean checkPassword(String password) {
         if (password != null) {return true;} else {
             Toast.makeText(this, "Password field is blank", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
-
     private void attemptLogin() {
         final EditText objEmail = findViewById(R.id.email);
         final EditText objPassword = findViewById(R.id.password);
@@ -116,7 +110,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-
     public void openCreateAccount(View view){
         startActivity(new Intent(LoginActivity.this, createAccountActivity.class));
     }

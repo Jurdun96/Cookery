@@ -22,4 +22,5 @@
     <string name="title_activity_create_account">createAccountActivity</string>
     <string name="title_activity_social">SocialActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_creator_new_recipe">creator_new_recipe</string>
 </resources>

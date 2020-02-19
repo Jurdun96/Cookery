@@ -4,7 +4,7 @@ package eatec.cookery;
  * Created by Jurdun-PC on 18/02/2020.
  */
 
-public class recipe {
+class recipe {
     private String recipeID;
     private String recipeName;
     private String recipeDescription;

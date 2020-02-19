@@ -188,7 +188,7 @@
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/RecipiesContainer"
+            android:id="@+id/RecipesContainer"
             android:layout_width="match_parent"
             android:layout_height="62dp"
             android:layout_marginEnd="8dp"
@@ -238,7 +238,7 @@
                 app:layout_constraintVertical_bias="1.0" />
 
             <Button
-                android:id="@+id/recpiesDummyButton"
+                android:id="@+id/recipesDummyButton"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="38dp"
                 android:layout_height="38dp"
@@ -261,7 +261,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/RecipiesContainer"
+            app:layout_constraintTop_toBottomOf="@+id/RecipesContainer"
             app:layout_constraintVertical_bias="0.0">
 
             <android.support.design.widget.FloatingActionButton
@@ -292,7 +292,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
-                android:text="Join in, in the social activies!"
+                android:text="Join in, in the social activities!"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/socialIcon"

@@ -4,19 +4,21 @@ package eatec.cookery;
  * Created by Jurdun-PC on 18/02/2020.
  */
 
-public class user {
+class user {
 
-    String userID;
-    String email;
-    String userName;
-    String cookeryRank;
+    private String userID;
+    private String email;
+    private String userName;
+    private String password;
+    private int cookeryRank;
 
     private void user() {}
 
-    public user(String userID, String email, String userName, String cookeryRank) {
+    public user(String userID, String email, String userName, String password, int cookeryRank) {
         this.userID = userID;
         this.email = email;
         this.userName = userName;
+        this.password = password;
         this.cookeryRank = cookeryRank;
     }
 
@@ -28,11 +30,14 @@ public class user {
         return email;
     }
 
+    public String getPassword() {return password;}
+
     public String getUserName() {
         return userName;
     }
 
-    public String getCookeryRank() {
+    public int getCookeryRank() {
         return cookeryRank;
     }
+
 }

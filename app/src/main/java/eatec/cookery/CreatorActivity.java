@@ -1,12 +1,11 @@
 package eatec.cookery;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,10 +21,8 @@ import java.util.List;
 public class CreatorActivity extends AppCompatActivity {
 
     //variables used in this activity
-    ListView viewRecipeList;
-    List<recipe> listRecipesList;
-    LinearLayout newRecipeDialog;
-
+    private ListView viewRecipeList;
+    private List<recipe> listRecipesList;
 
     //Firebase Database
     private DatabaseReference Database;
@@ -47,38 +44,24 @@ public class CreatorActivity extends AppCompatActivity {
                 Toast.makeText(CreatorActivity.this, "HAHAAAAA", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-
-    //addNewRecipe: Opens the dialog box to allow the user to enter a recipe name and description.
-    protected void addNewRecipe(View view) {
-        newRecipeDialog = findViewById(R.id.newRecipeDialog);
-        //Dialog visible
-        newRecipeDialog.setVisibility(View.VISIBLE);
-        //Button to confirm the name and description
-        final Button addRecipeButton = (Button) findViewById(R.id.addRecipeButton);
+        //Add new Recipe
+        FloatingActionButton addRecipeButton = (FloatingActionButton) findViewById(R.id.addNewRecipe);
         addRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText recipeTitle = findViewById(R.id.setTitleText);
-                EditText recipeDescription = findViewById(R.id.setDescriptionText);
-
-                final String recipeTitleText = recipeTitle.getText().toString();
-                final String recipeDescriptionText = recipeDescription.getText().toString();
-
-                addToDatabase(recipeTitleText, recipeDescriptionText);
-            }});
+                startActivity(new Intent(CreatorActivity.this, CreatorNewRecipe.class));
+            }
+        });
     }
 
-    //Add new recipe to database;
     protected void addToDatabase(String title, String description){
+        //generate key
         String recipeID = Database.push().getKey();
+        // create new recipe
         recipe newRecipe = new recipe(recipeID, title, description, "R.drawable.cookery_logo_round");
+        //add to database
         Database.child(recipeID).setValue(newRecipe);
-
-        newRecipeDialog.setVisibility(View.INVISIBLE);
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -106,5 +89,9 @@ public class CreatorActivity extends AppCompatActivity {
 
             }
         });
+    }
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }
