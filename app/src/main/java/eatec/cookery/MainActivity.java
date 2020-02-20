@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         if (mAuth.getCurrentUser() != null) {getUserDetails();}
 
+
     }
 
     public void getUserDetails() {
@@ -55,17 +56,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     public void openCreatorActivity(View view) {
         startActivity(new Intent(MainActivity.this, CreatorActivity.class));
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        overridePendingTransition(0,0);
+        finish();
     }
     public void openSocialActivity(View view) {
         startActivity(new Intent(MainActivity.this, SocialActivity.class));
-        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+        overridePendingTransition(0,0);
+        finish();
     }
     public void openRecipesActivity(View view) {
         startActivity(new Intent(MainActivity.this, RecipesActivity.class));
+        overridePendingTransition(0,0);
+        finish();
     }
+    public void openHomeActivity(View view) {
+    }
+
     public void openLoginActivity(View view) {
         if(currentUser != null) {
             startActivity(new Intent(MainActivity.this, ProfileActivity.class));
@@ -87,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
             login.setVisibility(View.INVISIBLE);
         }
         else {
+            startActivity(new Intent(MainActivity.this, LoginPreActivity.class));
             login.setVisibility(View.VISIBLE);
-
             username.setVisibility(View.INVISIBLE);
             rank.setVisibility(View.INVISIBLE);
         }

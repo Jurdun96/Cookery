@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,15 +24,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login); 
         mAuth = FirebaseAuth.getInstance();
-
-        //Google Signin
-        SignInButton googleSignIn = (SignInButton) findViewById(R.id.GoogleSignin);
-        googleSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), GoogleSignInActivity.class);
-                view.getContext().startActivity(intent);
-            }});
 
         //Regular login
         EditText objEmail = findViewById(R.id.email);
@@ -101,6 +91,8 @@ public class LoginActivity extends AppCompatActivity {
                             //set signin fields to empty, indicating login was successful along with toast
                             objEmail.setText("");
                             objPassword.setText("");
+
+                            finish();
 
                         } else {
                             // If sign in fails, display a message to the user.

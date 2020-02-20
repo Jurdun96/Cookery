@@ -54,6 +54,24 @@ public class CreatorActivity extends AppCompatActivity {
         });
     }
 
+    public void openCreatorActivity(View view) {
+    }
+    public void openSocialActivity(View view) {
+        startActivity(new Intent(CreatorActivity.this, SocialActivity.class));
+        overridePendingTransition(0,0);
+        finish();
+    }
+    public void openRecipesActivity(View view) {
+        startActivity(new Intent(CreatorActivity.this, RecipesActivity.class));
+        overridePendingTransition(0,0);
+        finish();
+    }
+    public void openHomeActivity(View view) {
+        startActivity(new Intent(CreatorActivity.this, MainActivity.class));
+        overridePendingTransition(0,0);
+        finish();
+    }
+
     protected void addToDatabase(String title, String description){
         //generate key
         String recipeID = Database.push().getKey();
@@ -92,6 +110,6 @@ public class CreatorActivity extends AppCompatActivity {
     }
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        overridePendingTransition(0,0);
     }
 }

@@ -53,6 +53,7 @@
             android:name=".SocialActivity"
             android:label="@string/title_activity_social"
             android:theme="@style/AppTheme" />
+        <activity android:name=".LoginPreActivity"></activity>
     </application>
 
 </manifest>
