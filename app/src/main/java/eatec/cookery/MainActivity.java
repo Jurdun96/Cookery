@@ -74,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
     }
     public void openHomeActivity(View view) {
     }
+    public void openFavouritesActivity(View view) {
+        startActivity(new Intent(MainActivity.this, FavouritesActivity.class));
+        overridePendingTransition(0,0);
+        finish();
+    }
 
     public void openLoginActivity(View view) {
         if(currentUser != null) {

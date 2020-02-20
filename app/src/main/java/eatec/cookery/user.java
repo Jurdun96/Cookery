@@ -12,7 +12,8 @@ class user {
     private String password;
     private int cookeryRank;
 
-    private void user() {}
+    public user() {
+    }
 
     public user(String userID, String email, String userName, String password, int cookeryRank) {
         this.userID = userID;

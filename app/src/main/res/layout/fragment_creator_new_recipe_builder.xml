@@ -34,12 +34,13 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/confirmRecipeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:clickable="true"
+        android:onClick="setToDatabase"
         android:src="@android:drawable/ic_menu_compass"
         app:elevation="1dp"
         app:fabSize="normal"

@@ -20,11 +20,8 @@ import java.util.List;
 
 public class CreatorActivity extends AppCompatActivity {
 
-    //variables used in this activity
     private ListView viewRecipeList;
     private List<recipe> listRecipesList;
-
-    //Firebase Database
     private DatabaseReference Database;
 
     @Override
@@ -71,15 +68,12 @@ public class CreatorActivity extends AppCompatActivity {
         overridePendingTransition(0,0);
         finish();
     }
-
-    protected void addToDatabase(String title, String description){
-        //generate key
-        String recipeID = Database.push().getKey();
-        // create new recipe
-        recipe newRecipe = new recipe(recipeID, title, description, "R.drawable.cookery_logo_round");
-        //add to database
-        Database.child(recipeID).setValue(newRecipe);
+    public void openFavouritesActivity(View view) {
+        startActivity(new Intent(CreatorActivity.this, FavouritesActivity.class));
+        overridePendingTransition(0,0);
+        finish();
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -107,9 +101,5 @@ public class CreatorActivity extends AppCompatActivity {
 
             }
         });
-    }
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(0,0);
     }
 }

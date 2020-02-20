@@ -19,7 +19,7 @@
     <include
         android:id="@+id/include3"
         layout="@layout/content_social"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
