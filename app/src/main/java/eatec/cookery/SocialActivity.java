@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,6 +31,9 @@ public class SocialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_social);
 
+        //Highlight the home buttons to indicated current page;
+        highlightMenuIcon();
+
         database = FirebaseDatabase.getInstance().getReference("users");
         listUserList = new ArrayList<>();
         viewUserList = findViewById(R.id.userListLV);
@@ -37,7 +41,7 @@ public class SocialActivity extends AppCompatActivity {
         viewUserList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(SocialActivity.this, "HAHAAAAA", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SocialActivity.this, "Nope", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -46,10 +50,27 @@ public class SocialActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Nope", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    public void highlightMenuIcon() {
+        ImageView socialButton = findViewById(R.id.socialButton);//THIS SELECTED
+        socialButton.setImageResource(R.drawable.friends_selected);
+
+        ImageView searchButton = findViewById(R.id.searchButton);
+        searchButton.setImageResource(R.drawable.search);
+
+        ImageView homeButton = findViewById(R.id.homeButton);
+        homeButton.setImageResource(R.drawable.home_icon);
+
+        ImageView favouriteButton = findViewById(R.id.favouriteButton);
+        favouriteButton.setImageResource(R.drawable.heart);
+
+        ImageView myRecipesButton = findViewById(R.id.myRecipesButton);
+        myRecipesButton.setImageResource(R.drawable.book);
     }
 
     @Override

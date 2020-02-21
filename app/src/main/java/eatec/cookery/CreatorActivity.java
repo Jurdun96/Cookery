@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -29,6 +30,9 @@ public class CreatorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creator);
 
+        //Highlight the home buttons to indicated current page;
+        highlightMenuIcon();
+
         Database = FirebaseDatabase.getInstance().getReference("recipes");
         //Init List
         listRecipesList = new ArrayList<>();
@@ -38,7 +42,7 @@ public class CreatorActivity extends AppCompatActivity {
         viewRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(CreatorActivity.this, "HAHAAAAA", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreatorActivity.this, "Nope", Toast.LENGTH_SHORT).show();
             }
         });
         //Add new Recipe
@@ -51,6 +55,22 @@ public class CreatorActivity extends AppCompatActivity {
         });
     }
 
+    public void highlightMenuIcon() {
+        ImageView socialButton = findViewById(R.id.socialButton);
+        socialButton.setImageResource(R.drawable.friends);
+
+        ImageView searchButton = findViewById(R.id.searchButton);
+        searchButton.setImageResource(R.drawable.search);
+
+        ImageView homeButton = findViewById(R.id.homeButton);
+        homeButton.setImageResource(R.drawable.home_icon);
+
+        ImageView favouriteButton = findViewById(R.id.favouriteButton);
+        favouriteButton.setImageResource(R.drawable.heart);
+
+        ImageView myRecipesButton = findViewById(R.id.myRecipesButton);//THIS SELECTED
+        myRecipesButton.setImageResource(R.drawable.book_selected);
+    }
     public void openCreatorActivity(View view) {
     }
     public void openSocialActivity(View view) {

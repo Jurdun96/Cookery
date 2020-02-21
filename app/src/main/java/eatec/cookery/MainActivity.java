@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Highlight the home buttons to indicated current page;
+        highlightMenuIcon();
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -78,6 +82,23 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, FavouritesActivity.class));
         overridePendingTransition(0,0);
         finish();
+    }
+
+    public void highlightMenuIcon() {
+        ImageView socialButton = findViewById(R.id.socialButton);
+        socialButton.setImageResource(R.drawable.friends);
+
+        ImageView searchButton = findViewById(R.id.searchButton);
+        searchButton.setImageResource(R.drawable.search);
+
+        ImageView homeButton = findViewById(R.id.homeButton);
+        homeButton.setImageResource(R.drawable.home_icon_selected); //THIS SELECTED
+
+        ImageView favouriteButton = findViewById(R.id.favouriteButton);
+        favouriteButton.setImageResource(R.drawable.heart);
+
+        ImageView myRecipesButton = findViewById(R.id.myRecipesButton);
+        myRecipesButton.setImageResource(R.drawable.book);
     }
 
     public void openLoginActivity(View view) {
