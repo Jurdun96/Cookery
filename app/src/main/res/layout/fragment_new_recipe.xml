@@ -106,6 +106,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:checked="false"
+                android:onClick="tagsCheckbox"
                 android:text="Vegan"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/privacySpinner" />
@@ -116,6 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:onClick="tagsCheckbox"
                 android:text="Gluten Free"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/vegCheck" />
@@ -126,6 +129,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:onClick="tagsCheckbox"
                 android:text="Vegetarian"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/veganCheck" />
@@ -143,26 +147,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:onClick="tagsCheckbox"
                 android:text="Nut Free"
                 app:layout_constraintStart_toEndOf="@+id/vegCheck"
                 app:layout_constraintTop_toBottomOf="@+id/lactoCheck" />
+
+            <CheckBox
+                android:id="@+id/lactoCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="tagsCheckbox"
+                android:text="Lactose Free"
+                app:layout_constraintStart_toEndOf="@+id/veganCheck"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <CheckBox
                 android:id="@+id/eggCheck"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:onClick="tagsCheckbox"
                 android:text="Egg Free"
                 app:layout_constraintStart_toEndOf="@+id/gfCheck"
                 app:layout_constraintTop_toBottomOf="@+id/nutCheck" />
 
-            <CheckBox
-                android:id="@+id/lactoCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lactose Free"
-                app:layout_constraintStart_toEndOf="@+id/veganCheck"
-                app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>

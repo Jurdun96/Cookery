@@ -18,10 +18,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class CreatorNewRecipe extends AppCompatActivity {
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private FirebaseAuth mAuth;
     private DatabaseReference Database;
+    private String tags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,61 +78,84 @@ public class CreatorNewRecipe extends AppCompatActivity {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
-
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a creatorFragment (defined as a static inner class below).
             return creatorFragment.newInstance(position + 1);
         }
-
         @Override
         public int getCount() {
             return 2;
         }
     }
 
-    protected void setToDatabase(View view) {
-        EditText editRecipeName = (EditText) findViewById(R.id.newRecipeName);
-        EditText editRecipeDescription = (EditText) findViewById(R.id.newRecipeDescription);
-
+    public void setToDatabase(View view) {
+        //get by text views
+        EditText editRecipeName = findViewById(R.id.newRecipeName);
+        EditText editRecipeDescription = findViewById(R.id.newRecipeDescription);
+        //pass text views to string
         String recipeName = editRecipeName.getText().toString();
         String recipeDescription = editRecipeDescription.getText().toString();
 
-        String tags = "none";
-
-        CheckBox veganCheck = findViewById(R.id.veganCheck);
-        if (veganCheck.isChecked()) {
-            tags += ", vegan";
-        }
-        CheckBox gfCheck = findViewById(R.id.gfCheck);
-        if (gfCheck.isChecked()) {
-            tags += ", gf";
-        }
-        CheckBox vegCheck = findViewById(R.id.vegCheck);
-        if (vegCheck.isChecked()) {
-            tags += ", veg";
-        }
-        CheckBox nutCheck = findViewById(R.id.nutCheck);
-        if (nutCheck.isChecked()) {
-            tags += ", nuts";
-        }
-        CheckBox eggCheck = findViewById(R.id.eggCheck);
-        if (eggCheck.isChecked()) {
-            tags += ", egg";
-        }
-        CheckBox lactoCheck = findViewById(R.id.lactoCheck);
-        if (lactoCheck.isChecked()) {
-            tags += ", lacto";
-        }
         Spinner privacySpinner = findViewById(R.id.privacySpinner);
         //TODO privacy spinner
         //TODO upload image
-        addToDatabase(recipeName, recipeDescription, tags);
 
+        //add to database the 3 inputs.
+        addToDatabase(recipeName, recipeDescription, tags);
+        //finish activity
         finish();
     }
+    public void tagsCheckbox(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
 
+        //TODO add a clear button to clear all selections
+        switch(view.getId()) {
+            case R.id.veganCheck:
+                if(checked)
+                    tags += ", vegan";
+                else
+                    tags +=", nada";
+                view.setEnabled(false);
+                break;
+            case R.id.vegCheck:
+                if(checked)
+                    tags +=", veg";
+                else
+                    tags +=", nada";
+                view.setEnabled(false);
+                break;
+            case R.id.gfCheck:
+                if(checked)
+                    tags += ", gf";
+                else
+                    tags += ", nada";
+                view.setEnabled(false);
+                break;
+            case R.id.nutCheck:
+                if (checked)
+                    tags += ", nuts";
+                else
+                    tags += ", nada";
+                view.setEnabled(false);
+                break;
+            case R.id.eggCheck:
+                if(checked)
+                    tags += ", egg";
+                else
+                    tags += ", nada";
+                view.setEnabled(false);
+                break;
+            case R.id.lactoCheck:
+                if (checked)
+                    tags += ", lacto";
+                else
+                    tags += ", nada";
+                view.setEnabled(false);
+                break;
+        }
+    }
     protected void addToDatabase(String recipeName, String recipeDescription, String tags){
 
         //generate key
