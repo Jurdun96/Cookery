@@ -78,7 +78,7 @@ public class RecipesActivity extends AppCompatActivity {
             }
         });
     }
-    
+
     public void highlightMenuIcon() {
         ImageView socialButton = findViewById(R.id.socialButton);
         socialButton.setImageResource(R.drawable.friends);
