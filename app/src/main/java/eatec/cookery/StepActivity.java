@@ -1,9 +1,9 @@
 package eatec.cookery;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -17,7 +17,7 @@ import java.util.List;
 
 
 public class StepActivity extends AppCompatActivity {
-    Button addStepButton;
+    FloatingActionButton addStepButton;
     private ListView viewStepsList;
     private List<step> listStepsList;
     private DatabaseReference Database;
@@ -35,7 +35,7 @@ public class StepActivity extends AppCompatActivity {
         //init steps List view
         viewStepsList = findViewById(R.id.stepsList);
 
-        addStepButton = (Button) findViewById(R.id.addStepButton);
+        addStepButton = (FloatingActionButton) findViewById(R.id.addStepButton);
         addStepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,5 +78,9 @@ public class StepActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void finishCreating(View view) {
+        finish();
     }
 }
