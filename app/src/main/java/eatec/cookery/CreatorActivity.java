@@ -96,30 +96,31 @@ public class CreatorActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        //receives all the recipes and adds them to the list
         super.onStart();
         Database.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
                 //Clear previous list
                 listRecipesList.clear();
 
                 //Iterate through the nodes
                 for(DataSnapshot recipeSnapshot : dataSnapshot.getChildren()){
-                    //get recipe
-                    recipe recipe = recipeSnapshot.getValue(recipe.class);
-                    //add to list
-                    listRecipesList.add(recipe);
+                //get recipe
+                recipe recipe = recipeSnapshot.getValue(recipe.class);
+                //add to list
+                listRecipesList.add(recipe);
                 }
                 //create Adapter
                 recipeList recipesAdapter = new recipeList(CreatorActivity.this, listRecipesList);
                 //Attatch adapter to listview
                 viewRecipeList.setAdapter(recipesAdapter);
-            }
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
 
-            }
+                }
         });
     }
 }

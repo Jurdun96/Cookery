@@ -23,4 +23,9 @@
     <string name="title_activity_social">SocialActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_creator_new_recipe">creator_new_recipe</string>
+    <string name="title_activity_fragment_recipe_builder">FragmentRecipeBuilder</string>
+    <string name="title_activity_recipe_builder">RecipeBuilder</string>
+    <string name="title_activity_step_builder">StepBuilder</string>
+    <string name="title_activity_create_steps">CreateSteps</string>
+    <string name="title_activity_step">StepActivity</string>
 </resources>

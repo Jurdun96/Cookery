@@ -16,17 +16,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:background="@android:color/transparent"
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:scaleType="fitCenter"
+            android:scaleX="2"
+            android:scaleY="2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/cookery_logo_round" />
+            app:srcCompat="@mipmap/cookery_match_logo" />
     </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
@@ -58,6 +59,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:background="@color/googleButtonColor"
+            android:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
             android:text="CONTINUE WITH GOOGLE"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
@@ -70,6 +72,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:background="@color/facebookButtonColor"
+            android:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
             android:text="CONTINUE WITH FACEBOOK"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
