@@ -45,11 +45,14 @@ public class ProfileActivity extends AppCompatActivity {
                 TextView bioText = findViewById(R.id.bioText);
                 TextView rank = findViewById(R.id.cookeryRankText);
                 TextView username = findViewById(R.id.usernameText);
+
                 //Get the current users Unique ID. Used to find them in the database.
                 UID = mAuth.getCurrentUser().getUid();
+                //get user details from database
+                user user = dataSnapshot.child(UID).getValue(user.class);
                 //Set their details in the User details container.
-                username.setText(dataSnapshot.child(UID).child("userName").getValue().toString());
-                rank.setText(dataSnapshot.child(UID).child("cookeryRank").getValue().toString());
+                username.setText(user.getUserName());
+                rank.setText(user.convertCookeryRank());
                 //TODO biography text
             }
 

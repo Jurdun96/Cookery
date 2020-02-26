@@ -36,10 +36,12 @@ class recipeList extends ArrayAdapter<recipe> {
         //Row objects
         TextView titleText = (TextView) listViewItem.findViewById(R.id.titleText);
         TextView descriptionText = (TextView) listViewItem.findViewById(R.id.descriptionText);
+        TextView recipeID = (TextView) listViewItem.findViewById(R.id.recipeIDTextView);
         ImageView recipeImage = listViewItem.findViewById(R.id.rowImage);
         //init Recipe
         recipe recipe = recipes.get(position);
         //Set Data
+        recipeID.setText(recipe.getRecipeID());
         titleText.setText(recipe.getRecipeName());
         descriptionText.setText(recipe.getRecipeDescription());
         //TODO If user has uploaded an image, then use that, else then use default

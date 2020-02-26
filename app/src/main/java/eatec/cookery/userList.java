@@ -39,12 +39,9 @@ class userList extends ArrayAdapter<user> {
         ImageView recipeImage = listViewItem.findViewById(R.id.rowImage);//TODO change
         //init user
         user user = users.get(position);
-        //convert the cookery Rank to a string
-        int cookeryRankInt = user.getCookeryRank();
-        String cookerRankString = String.valueOf(cookeryRankInt);
         //Set Data
         titleText.setText(user.getUserName());
-        cookeryRank.setText(cookerRankString);
+        cookeryRank.setText(user.convertCookeryRank());
         //TODO If user has uploaded an image, then use that, else then use default
         return listViewItem;
     }

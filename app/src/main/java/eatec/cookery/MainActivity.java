@@ -50,8 +50,10 @@ public class MainActivity extends AppCompatActivity {
                 //Get the current users Unique ID. Used to find them in the database.
                 UID = mAuth.getCurrentUser().getUid();
                 //Set their details in the User details container.
-                username.setText(dataSnapshot.child(UID).child("userName").getValue().toString());
-                rank.setText(dataSnapshot.child(UID).child("cookeryRank").getValue().toString());
+                user user = dataSnapshot.child(UID).getValue(user.class);
+
+                username.setText(user.getUserName());
+                rank.setText(user.convertCookeryRank());
             }
 
             @Override

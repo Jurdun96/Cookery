@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +31,6 @@ public class RecipesActivity extends AppCompatActivity {
 
         //Highlight the menu buttons to indicated current page;
         highlightMenuIcon();
-
         //get database
         Database = FirebaseDatabase.getInstance().getReference("recipes");
         //init list
@@ -41,7 +40,14 @@ public class RecipesActivity extends AppCompatActivity {
         viewRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(RecipesActivity.this, "Nope", Toast.LENGTH_SHORT).show();
+                //get the items container where the ID is stored
+                TextView recipeIDTV = view.findViewById(R.id.recipeIDTextView);
+                String recipeID = recipeIDTV.getText().toString();
+
+                //open the ViewRecipe activity referencening that recipe ID;
+                Intent mIntent = new Intent(RecipesActivity.this, ViewRecipeActivity.class);
+                mIntent.putExtra("recipeID", recipeID);
+                startActivity(mIntent);
             }
         });
 
@@ -68,7 +74,7 @@ public class RecipesActivity extends AppCompatActivity {
                 //create Adapter
                 recipeList recipesAdapter = new recipeList(RecipesActivity.this, listRecipesList);
 
-                //Attatch adapter to listview
+                //Attatch adapter to list view
                 viewRecipeList.setAdapter(recipesAdapter);
             }
 
@@ -78,6 +84,7 @@ public class RecipesActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public void highlightMenuIcon() {
         ImageView socialButton = findViewById(R.id.socialButton);

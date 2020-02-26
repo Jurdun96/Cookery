@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -45,7 +45,14 @@ public class CreatorActivity extends AppCompatActivity {
         viewRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(CreatorActivity.this, "Nope", Toast.LENGTH_SHORT).show();
+                //get the items container where the ID is stored
+                TextView recipeIDTV = view.findViewById(R.id.recipeIDTextView);
+                String recipeID = recipeIDTV.getText().toString();
+
+                //open the ViewRecipe activity referencening that recipe ID;
+                Intent mIntent = new Intent(CreatorActivity.this, ViewRecipeActivity.class);
+                mIntent.putExtra("recipeID", recipeID);
+                startActivity(mIntent);
             }
         });
         //Add new Recipe

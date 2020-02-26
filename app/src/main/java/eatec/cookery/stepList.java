@@ -54,8 +54,8 @@ public class stepList extends ArrayAdapter<step>{
         View listViewItem = inflater.inflate(R.layout.fragment_step,null,true);
 
         //step objects
-        final TextView descriptionText = (TextView) listViewItem.findViewById(R.id.stepRecipeLongText);
-        final TextView longDescriptionText = (TextView) listViewItem.findViewById(R.id.stepRecipeShortText);
+        final TextView descriptionText = (TextView) listViewItem.findViewById(R.id.stepRecipeShortText);
+        final TextView longDescriptionText = (TextView) listViewItem.findViewById(R.id.stepRecipeLongText);
         ImageView stepImage = listViewItem.findViewById(R.id.stepImage);
 
 

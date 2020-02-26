@@ -8,28 +8,19 @@
     tools:context="eatec.cookery.CreatorActivity"
     tools:showIn="@layout/activity_creator">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/recipesLayout"
+    <ListView
+        android:id="@+id/recipeList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="always"
-        android:padding="16dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:scrollbarSize="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ListView
-            android:id="@+id/recipeList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@null"
-            android:dividerHeight="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addNewRecipe"
