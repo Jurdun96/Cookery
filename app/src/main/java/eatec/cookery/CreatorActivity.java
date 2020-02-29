@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -16,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -65,27 +65,22 @@ public class CreatorActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        //receives all the recipes and adds them to the list
-        Database.addValueEventListener(new ValueEventListener() {
+        //query to just associate the table with that user; Meaning if someone else adds a recipe it on their account
+        //it will not affect this list
+        Query query = Database.orderByChild("userID").equalTo(mAuth.getCurrentUser().getUid());
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Clear previous list
-                recipeList.clear();
+                //recipeList.clear();
 
                 //Iterate through the nodes
                 for(DataSnapshot recipeSnapshot : dataSnapshot.getChildren()){
 
                     //get recipe
-                    recipe recipe = recipeSnapshot.getValue(recipe.class);
-
-                    // creator activity is private for the user; so only get recipes that belong to that user
-                    if (recipe.getUserID().equals(mAuth.getCurrentUser().getUid())) {
-                        //add to list
-                        recipeList.add(recipe);
-                        Log.i("Put ", recipe.getRecipeID() + " in " + recipeList.indexOf(recipe));
-                    }
+                    recipe mrecipe = recipeSnapshot.getValue(recipe.class);
+                    recipeList.add(mrecipe);
                     //init and set adapter to view
-                    Log.i("Set: ", "%s" + recipeList.size());
                     recipeList recipesAdapter = new recipeList(CreatorActivity.this, recipeList);
                     viewRecipeList.setAdapter(recipesAdapter);
                 }
