@@ -9,14 +9,13 @@
     tools:showIn="@layout/activity_creator">
 
     <ListView
-        android:id="@+id/recipeList"
+        android:id="@+id/listView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp"
-        android:scrollbarSize="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -18,15 +19,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CreatorActivity extends AppCompatActivity {
 
     private ListView viewRecipeList;
-    private List<recipe> listRecipesList;
+    private ArrayList<recipe> recipeList;
     private DatabaseReference Database;
     private FirebaseAuth mAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,14 +33,12 @@ public class CreatorActivity extends AppCompatActivity {
 
         //Highlight the home buttons to indicated current page;
         highlightMenuIcon();
-
+        //get recipes from database reference and the log in information
         Database = FirebaseDatabase.getInstance().getReference("recipes");
         mAuth = FirebaseAuth.getInstance();
         //Init List
-        listRecipesList = new ArrayList<>();
-        //Init ListView
-        viewRecipeList = findViewById(R.id.recipeList);
-        //Items in recipe list clickable
+        recipeList = new ArrayList<>();
+        viewRecipeList = findViewById(R.id.listView1);
         viewRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -61,6 +58,42 @@ public class CreatorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(CreatorActivity.this, CreatorNewRecipe.class));
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //receives all the recipes and adds them to the list
+        Database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Clear previous list
+                recipeList.clear();
+
+                //Iterate through the nodes
+                for(DataSnapshot recipeSnapshot : dataSnapshot.getChildren()){
+
+                    //get recipe
+                    recipe recipe = recipeSnapshot.getValue(recipe.class);
+
+                    // creator activity is private for the user; so only get recipes that belong to that user
+                    if (recipe.getUserID().equals(mAuth.getCurrentUser().getUid())) {
+                        //add to list
+                        recipeList.add(recipe);
+                        Log.i("Put ", recipe.getRecipeID() + " in " + recipeList.indexOf(recipe));
+                    }
+                    //init and set adapter to view
+                    Log.i("Set: ", "%s" + recipeList.size());
+                    recipeList recipesAdapter = new recipeList(CreatorActivity.this, recipeList);
+                    viewRecipeList.setAdapter(recipesAdapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
@@ -103,40 +136,4 @@ public class CreatorActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    protected void onStart() {
-        //receives all the recipes and adds them to the list
-        super.onStart();
-        Database.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            //Clear previous list
-            listRecipesList.clear();
-
-            //Iterate through the nodes
-            for(DataSnapshot recipeSnapshot : dataSnapshot.getChildren()){
-
-                //get recipe
-                recipe recipe = recipeSnapshot.getValue(recipe.class);
-
-                // creator activity is private for the user; so only get recipes that belong to that user
-                if (recipe.getUserID().equals(mAuth.getCurrentUser().getUid())) {
-                    //add to list
-                    listRecipesList.add(recipe);
-                }
-            }
-
-            //create Adapter
-            recipeList recipesAdapter = new recipeList(CreatorActivity.this, listRecipesList);
-
-            //Attatch adapter to listview
-            viewRecipeList.setAdapter(recipesAdapter);
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-                }
-        });
-    }
 }
