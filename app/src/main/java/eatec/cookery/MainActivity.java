@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
                 TextView username = findViewById(R.id.usernameTextBox);
                 TextView rank = findViewById(R.id.cookeryRankTextBox);
+                ImageView userImage = findViewById(R.id.userImage);
                 //Get the current users Unique ID. Used to find them in the database.
                 UID = mAuth.getCurrentUser().getUid();
                 //Set their details in the User details container.
@@ -54,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
 
                 username.setText(user.getUserName());
                 rank.setText(user.convertCookeryRank());
+                Picasso.get()
+                        .load(user.getProfilePicture())
+                        .placeholder(R.drawable.user)
+                        .into(userImage);
             }
 
             @Override

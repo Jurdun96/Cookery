@@ -9,18 +9,20 @@ class user {
     private String userID;
     private String email;
     private String userName;
-    private String password;
+    private String bio;
+    private String profilePicture;
     private int cookeryRank;
 
     private String shownCookeryRank;
     public user() {
     }
 
-    public user(String userID, String email, String userName, String password, int cookeryRank) {
+    public user(String userID, String email, String userName, String profilePicture, String bio, int cookeryRank) {
         this.userID = userID;
         this.email = email;
         this.userName = userName;
-        this.password = password;
+        this.profilePicture = profilePicture;
+        this.bio = bio;
         this.cookeryRank = cookeryRank;
     }
 
@@ -28,11 +30,15 @@ class user {
         return userID;
     }
 
+    public String getBio() {return bio;}
+
     public String getEmail() {
         return email;
     }
 
-    public String getPassword() {return password;}
+    public String getProfilePicture() {
+        return profilePicture;
+    }
 
     public String getUserName() {
         return userName;

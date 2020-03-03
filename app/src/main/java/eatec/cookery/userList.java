@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -36,10 +38,14 @@ class userList extends ArrayAdapter<user> {
         //Row objects
         TextView titleText = (TextView) listViewItem.findViewById(R.id.titleText);
         TextView cookeryRank = (TextView) listViewItem.findViewById(R.id.cookeryRankText);
-        ImageView recipeImage = listViewItem.findViewById(R.id.rowImage);//TODO change
+        ImageView userPP = listViewItem.findViewById(R.id.rowImage);//TODO change
         //init user
         user user = users.get(position);
         //Set Data
+        Picasso.get()
+                .load(user.getProfilePicture())
+                .placeholder(R.drawable.user)
+                .into(userPP);
         titleText.setText(user.getUserName());
         cookeryRank.setText(user.convertCookeryRank());
         //TODO If user has uploaded an image, then use that, else then use default

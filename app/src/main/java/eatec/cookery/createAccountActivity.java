@@ -64,9 +64,9 @@ public class createAccountActivity extends AppCompatActivity {
     }
 
     //Add to database method
-    public void addDetailsToDatabase (String userID, String email, String password, String username, int cookeryRank) {
+    public void addDetailsToDatabase (String userID, String email, String profilePicture, String username, int cookeryRank) {
         //create a new user object
-        user newUser = new user(userID, email, username, password, cookeryRank);
+        user newUser = new user(userID, email, username, profilePicture, "", cookeryRank);
         //add that user object to the database
         database.child(userID).setValue(newUser);
     }
