@@ -72,8 +72,7 @@ public class CreatorActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Clear previous list
-                //recipeList.clear();
-
+                recipeList.clear();
                 //Iterate through the nodes
                 for(DataSnapshot recipeSnapshot : dataSnapshot.getChildren()){
 

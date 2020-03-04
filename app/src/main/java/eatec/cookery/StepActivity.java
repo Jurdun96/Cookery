@@ -27,11 +27,18 @@ public class StepActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step);
+        //getref
         Database = FirebaseDatabase.getInstance().getReference("steps");
+
+        //give xp
+        new giveRep(this, "Recipe added: 1 reputation gained!", 1);
+
         //pass recipeID;
         recipeID = getIntent().getStringExtra("recipeID");
+
         //init steps list
         listStepsList = new ArrayList<>();
+
         //init steps List view
         viewStepsList = findViewById(R.id.stepsList);
 

@@ -1,5 +1,7 @@
 package eatec.cookery;
 
+import java.util.Map;
+
 /**
  * Created by Jurdun-PC on 18/02/2020.
  */
@@ -11,20 +13,25 @@ class user {
     private String userName;
     private String bio;
     private String profilePicture;
+
     private int cookeryRank;
-
     private String shownCookeryRank;
-    public user() {
-    }
 
-    public user(String userID, String email, String userName, String profilePicture, String bio, int cookeryRank) {
+    private Map<String, String> following;
+
+    public user() {}
+
+    public user(String userID, String email, String userName, String profilePicture, String bio, Map<String, String> following, int cookeryRank) {
         this.userID = userID;
         this.email = email;
         this.userName = userName;
         this.profilePicture = profilePicture;
         this.bio = bio;
+        this.following = following;
         this.cookeryRank = cookeryRank;
     }
+
+    public Map<String, String> getFollowing() {return following;}
 
     public String getUserID() {
         return userID;
@@ -84,5 +91,4 @@ class user {
         }
         return shownCookeryRank;
     }
-
 }

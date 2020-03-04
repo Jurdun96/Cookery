@@ -15,6 +15,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class createAccountActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference database;
@@ -66,7 +69,8 @@ public class createAccountActivity extends AppCompatActivity {
     //Add to database method
     public void addDetailsToDatabase (String userID, String email, String profilePicture, String username, int cookeryRank) {
         //create a new user object
-        user newUser = new user(userID, email, username, profilePicture, "", cookeryRank);
+        Map<String,String> following = new HashMap<>();
+        user newUser = new user(userID, email, username, profilePicture, "", following, cookeryRank);
         //add that user object to the database
         database.child(userID).setValue(newUser);
     }

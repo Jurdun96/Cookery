@@ -2,11 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/profileMainOuterLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/match_background"
-    tools:layout_editor_absoluteY="25dp">
+    tools:context=".ViewUserProfile">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/profileOuterContainer"
@@ -32,7 +30,7 @@
                 android:layout_width="128dp"
                 android:layout_height="128dp"
                 android:layout_marginTop="24dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/user"
                 android:elevation="0dp"
                 android:scaleType="fitXY"
                 android:src="@android:color/transparent"
@@ -61,19 +59,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rankProgressBar" />
-
-            <TextView
-                android:id="@+id/addPPText"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:elevation="-1dp"
-                android:gravity="center"
-                android:text="Upload a profile piture!"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@+id/ppImageButton"
-                app:layout_constraintEnd_toEndOf="@+id/ppImageButton"
-                app:layout_constraintStart_toStartOf="@+id/ppImageButton"
-                app:layout_constraintTop_toTopOf="@+id/ppImageButton" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/usernameView"
@@ -109,33 +94,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ppContainer">
 
-            <EditText
+            <TextView
                 android:id="@+id/bioText"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginBottom="32dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginStart="32dp"
-                android:background="@android:color/transparent"
-                android:ems="10"
-                android:focusable="auto"
-                android:focusableInTouchMode="true"
-                android:gravity="fill_vertical"
-                android:hint="Enter your biography here for other users to learn more about you!"
-                android:inputType="textMultiLine"
-                android:textAlignment="center"
-                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This user has not added a biography yet!"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/actionsToolbar"
             android:layout_width="0dp"
             android:layout_height="82dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.508"
@@ -144,35 +119,34 @@
             app:layout_constraintVertical_bias="1.0">
 
             <TextView
-                android:id="@+id/signOutTextButton"
+                android:id="@+id/followUserButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:onClick="signOut"
-                android:text="Log out"
+                android:layout_marginStart="32dp"
+                android:text="Follow User"
                 android:textAllCaps="true"
-                android:textColor="@color/AccentGenericButtonColor"
-                android:textSize="18sp"
+                android:textColor="@color/facebookButtonColor"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/reportUserButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/reportUserButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:text="Report User"
+                android:textAllCaps="true"
+                android:textColor="@color/googleButtonColor"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/followUserButton"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
-
-        <ProgressBar
-            android:id="@+id/uploadProgressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="0dp"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/AccentGenericButtonColor"
-            android:progressTint="@color/AccentGenericButtonColor"
-            app:layout_constraintBottom_toTopOf="@+id/actionsToolbar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profileInfoContainer" />
 
     </android.support.constraint.ConstraintLayout>
 

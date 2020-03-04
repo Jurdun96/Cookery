@@ -176,13 +176,12 @@ public class ProfileActivity extends AppCompatActivity {
             });
         } else {
             Toast.makeText(this,"No file Selected", Toast.LENGTH_SHORT).show();
+
         }
     }
     public void getUserDetails() {
         //Get the user tree data
         Query query = database.orderByChild("userID").equalTo(mAuth.getCurrentUser().getUid());
-        //TODO edit profile
-
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -201,6 +200,7 @@ public class ProfileActivity extends AppCompatActivity {
                 //set Profile Picture
                 Picasso.get()
                         .load(user.getProfilePicture())
+                        .noPlaceholder()
                         .into(profilePicture);
                 //TODO biography text
             }
