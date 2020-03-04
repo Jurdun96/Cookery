@@ -21,13 +21,14 @@ import java.util.Map;
 public class createAccountActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference database;
-
+    private DatabaseReference followingDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance().getReference("users");
+        followingDatabase = FirebaseDatabase.getInstance().getReference("following");
     }
 
     public void createAccount(View view) {
@@ -73,6 +74,7 @@ public class createAccountActivity extends AppCompatActivity {
         user newUser = new user(userID, email, username, profilePicture, "", following, cookeryRank);
         //add that user object to the database
         database.child(userID).setValue(newUser);
+        followingDatabase.child(userID).child("default").setValue("default");
     }
 
 }

@@ -17,9 +17,13 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ViewUserProfile extends AppCompatActivity {
     //Firebase
-    private DatabaseReference database;
+    private DatabaseReference usersDatabase;
+    private DatabaseReference followingDatabase;
 
     private String currentUserUID;
     private String UID;
@@ -28,11 +32,12 @@ public class ViewUserProfile extends AppCompatActivity {
     private TextView bioText;
     private TextView rank;
     private TextView username;
+
     private TextView followButton;
+    private TextView unfollowButton;
 
     private user user;
-    private user currentUser;
-    private Boolean followed;
+    private List<String> usersList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +53,24 @@ public class ViewUserProfile extends AppCompatActivity {
         bioText = findViewById(R.id.bioText);
         rank = findViewById(R.id.cookeryRankText);
         username = findViewById(R.id.usernameText);
-        database = FirebaseDatabase.getInstance().getReference("users");
+
+        usersDatabase = FirebaseDatabase.getInstance().getReference("users");
+        followingDatabase = FirebaseDatabase.getInstance().getReference("following");
+
         followButton = findViewById(R.id.followUserButton);
+        unfollowButton = findViewById(R.id.unfollowUserButton);
+
+
+        usersList = new ArrayList<>();
 
     }
     @Override
     protected void onStart() {
         super.onStart();
+        //hides unfollow button if there is no following list accociated with this account
+        if(usersList.size() == 0) {unfollowButton.setVisibility(View.INVISIBLE);}
         //Get the user tree data
-        Query query = database.orderByChild("userID").equalTo(UID);
+        Query query = usersDatabase.orderByChild("userID").equalTo(UID);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -67,9 +81,8 @@ public class ViewUserProfile extends AppCompatActivity {
                 //Set their details in the User details container.
                 username.setText(user.getUserName());
                 rank.setText(user.convertCookeryRank());
-
                 bioText.setText(user.getBio());
-
+                //checks if the user has actually entered a bio, if not then a placeholder is added.
                 if (user.getBio().equals("")) {
                     bioText.setText("This user has not added any information about themselves yet!");
                 }
@@ -78,7 +91,6 @@ public class ViewUserProfile extends AppCompatActivity {
                         .load(user.getProfilePicture())
                         .noPlaceholder()
                         .into(ppImage);
-                //TODO biography text
             }
 
             @Override
@@ -86,30 +98,24 @@ public class ViewUserProfile extends AppCompatActivity {
                 Toast.makeText(ViewUserProfile.this, "There was an error regarding this account", Toast.LENGTH_SHORT).show();
             }
         });
-
-        Query followingRef = database.getRef().child(currentUserUID).child("following");
+        //in the following tree, gets the current users tree.
+        Query followingRef = followingDatabase.child(currentUserUID);
         followingRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    Toast.makeText(ViewUserProfile.this, dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
-                }
-                if (dataSnapshot.equals(UID)) {
-                    followButton.setText("unfollow user");
-                    followButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            unFollowUser();
-                        }
-                    });
-                }else {
-                    followButton.setText("follow user");
-                    followButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            followUser();
-                        }
-                    });
+                for (DataSnapshot users: dataSnapshot.getChildren()) {
+                    //gets the children in this tree
+                    //adds the IDs to this usersID local variable
+                    String thisUserID = users.getKey();
+                    //adds the local to the list
+                    if(thisUserID!=null) usersList.add(thisUserID);
+                    //if this current profiles id is contained in the clients following list then ui will react;
+                    if (usersList.contains(UID)) {
+                        showUnfollow();
+                    }
+                    else {
+                        showFollow();
+                    }
                 }
             }
 
@@ -120,19 +126,34 @@ public class ViewUserProfile extends AppCompatActivity {
         });
     }
 
-    public void followUser() {
-        database.child(currentUserUID).child("following").child(UID).setValue(user.getUserName());
-        Toast.makeText(this, "User followed", Toast.LENGTH_SHORT).show();
+    public void followUser(View view) {
+        followingDatabase.child(currentUserUID).child(UID).setValue(user.getUserName());
+        clearList();
     }
-    public void unFollowUser(){
-        database.child(currentUserUID).child("following").child(UID).removeValue();
-        Toast.makeText(this, "user unfollowed", Toast.LENGTH_SHORT).show();
+    public void unFollowUser(View view){
+        followingDatabase.child(currentUserUID).child(UID).removeValue();
+        clearList();
     }
+    public void clearList() {
+        usersList.clear();
+    }
+    public void showFollow() {
+        followButton.setVisibility(View.VISIBLE);
+        unfollowButton.setVisibility(View.INVISIBLE);
+    }
+    public void showUnfollow() {
+        unfollowButton.setVisibility(View.VISIBLE);
+        followButton.setVisibility(View.INVISIBLE);
+
+    }
+
+
     public void reportUser() {}
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        usersList.clear();
         finish();
     }
 }

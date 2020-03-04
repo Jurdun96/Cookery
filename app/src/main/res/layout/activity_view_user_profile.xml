@@ -119,10 +119,26 @@
             app:layout_constraintVertical_bias="1.0">
 
             <TextView
+                android:id="@+id/unfollowUserButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:onClick="unFollowUser"
+                android:text="Unfollow User"
+                android:textAllCaps="true"
+                android:textColor="@color/facebookButtonColor"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/reportUserButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/followUserButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
+                android:onClick="followUser"
                 android:text="Follow User"
                 android:textAllCaps="true"
                 android:textColor="@color/facebookButtonColor"

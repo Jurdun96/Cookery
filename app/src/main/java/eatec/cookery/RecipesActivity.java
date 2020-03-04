@@ -3,11 +3,15 @@ package eatec.cookery;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,17 +26,102 @@ public class RecipesActivity extends AppCompatActivity {
 
     private ListView viewRecipeList;
     private List<recipe> listRecipesList;
+
+    private List<String> tagList;
+
     private DatabaseReference Database;
+
+    private CardView veganCard;
+    private CardView noneCard;
+    private CardView fishCard;
+    private CardView vegetarianCard;
+
+    private EditText searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes);
 
-        //Highlight the menu buttons to indicated current page;
-        highlightMenuIcon();
         //get database
         Database = FirebaseDatabase.getInstance().getReference("recipes");
+
+        veganCard = findViewById(R.id.veganCard);
+        noneCard = findViewById(R.id.noneCard);
+        fishCard = findViewById(R.id.fishCard);
+        vegetarianCard = findViewById(R.id.vegCard);
+
+        //init and add null tag as a default
+        tagList = new ArrayList<>();
+
+        searchBar = findViewById(R.id.SearchBar);
+        //get data on this page through the search bar 1 time.
+        searchBar.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+
+                    final StringBuilder strTaglistBuilder = new StringBuilder();
+                    if (tagList.isEmpty()) {
+                        strTaglistBuilder.append("none");
+                    }
+
+                    for (int i = 0; tagList.size() > i; i++) {
+                        if (i == 0) {
+                            strTaglistBuilder.append(tagList.get(i));
+                        } else {
+                            strTaglistBuilder.append(", " + tagList.get(i));
+                        }
+                    }
+                    Database.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            //Clear previous list
+                            listRecipesList.clear();
+                            String strTagList = String.valueOf(strTaglistBuilder);
+                            Toast.makeText(RecipesActivity.this, strTagList, Toast.LENGTH_SHORT).show();
+                            //Iterate through the nodes
+                            for(DataSnapshot recipeSnapshot : dataSnapshot.getChildren()){
+                                //get recipe
+                                recipe recipe = recipeSnapshot.getValue(recipe.class);
+                                //if the recipe matches tags that the user has selceted and if it matches the search text;
+                                if (strTagList.toLowerCase().contains(recipe.getTags().toLowerCase())) {
+                                    if (recipe.getRecipeName().toLowerCase().contains(searchBar.getText().toString().toLowerCase())
+                                            || recipe.getRecipeDescription().toLowerCase().contains(searchBar.getText().toString().toLowerCase()))
+                                    {
+                                        //add to list if it matches the search
+                                        listRecipesList.add(recipe);
+                                    }
+                                }
+
+
+
+                            }
+
+                            //create Adapter
+                            recipeList recipesAdapter = new recipeList(RecipesActivity.this, listRecipesList);
+                            //Attatch adapter to list view
+                            viewRecipeList.setAdapter(recipesAdapter);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    return true;
+
+                }
+                else {
+
+                    return false;
+
+                }
+            }
+        });
+        //Highlight the menu buttons to indicated current page;
+        highlightMenuIcon();
         //init list
         listRecipesList = new ArrayList<>();
         //init listView
@@ -50,41 +139,35 @@ public class RecipesActivity extends AppCompatActivity {
                 startActivity(mIntent);
             }
         });
-
     }
-    @Override
-    protected void onStart() {
-        //receives all the recipes and adds them to the list
-        super.onStart();
-        Database.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //Clear previous list
-                listRecipesList.clear();
-
-                //Iterate through the nodes
-                for(DataSnapshot recipeSnapshot : dataSnapshot.getChildren()){
-
-                    //get recipe
-                    recipe recipe = recipeSnapshot.getValue(recipe.class);
-                    //add to list
-                    listRecipesList.add(recipe);
-                }
-
-                //create Adapter
-                recipeList recipesAdapter = new recipeList(RecipesActivity.this, listRecipesList);
-
-                //Attatch adapter to list view
-                viewRecipeList.setAdapter(recipesAdapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    public void setVeganCard(View v) {
+        if (tagList.contains("vegan")){
+            tagList.remove("vegan");
+        } else {
+            tagList.add("vegan");
+            tagList.remove("none");
+        }
     }
-
+    public void setVegetarianCard(View v) {
+        if (tagList.contains("veg")){
+            tagList.remove("veg");
+        } else {
+            tagList.add("veg");
+            tagList.remove("none");
+        }
+    }
+    public void setNoneCard(View v) {
+        tagList.clear();
+        tagList.add("none");
+    }
+    public void setFishCard(View v) {
+        if (tagList.contains("fish")){
+            tagList.remove("fish");
+        } else {
+            tagList.add("fish");
+            tagList.remove("none");
+        }
+    }
 
     public void highlightMenuIcon() {
         ImageView socialButton = findViewById(R.id.socialButton);
