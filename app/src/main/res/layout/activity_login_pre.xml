@@ -59,7 +59,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:background="@color/googleButtonColor"
-            android:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
             android:text="CONTINUE WITH GOOGLE"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
@@ -72,7 +71,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:background="@color/facebookButtonColor"
-            android:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
             android:text="CONTINUE WITH FACEBOOK"
             android:textColor="@android:color/white"
             android:textStyle="bold" />

@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Recipe Name"
+        android:text="Recipe Name *"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Recipe Description"
+        android:text="Recipe Description *"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newRecipeName" />
 
@@ -93,83 +93,56 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:padding="10dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/privacySpinner">
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/constraintLayout5"
+        <CheckBox
+            android:id="@+id/vegCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:onClick="tagsCheckbox"
+            android:text="Vegetarian"
+            app:layout_constraintStart_toEndOf="@+id/veganCheck"
+            app:layout_constraintTop_toBottomOf="@+id/preferenceText" />
 
-            <CheckBox
-                android:id="@+id/veganCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:onClick="tagsCheckbox"
-                android:text="Vegan"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/privacySpinner" />
-
-            <CheckBox
-                android:id="@+id/gfCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="tagsCheckbox"
-                android:text="Gluten Free"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/vegCheck" />
-
-            <CheckBox
-                android:id="@+id/vegCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="tagsCheckbox"
-                android:text="Vegetarian"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/veganCheck" />
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
+        <CheckBox
+            android:id="@+id/fishCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:onClick="tagsCheckbox"
+            android:text="Pescatarian"
+            app:layout_constraintStart_toEndOf="@+id/vegCheck"
+            app:layout_constraintTop_toBottomOf="@+id/preferenceText" />
 
-            <CheckBox
-                android:id="@+id/nutCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="tagsCheckbox"
-                android:text="Nut Free"
-                app:layout_constraintStart_toEndOf="@+id/vegCheck"
-                app:layout_constraintTop_toBottomOf="@+id/lactoCheck" />
+        <CheckBox
+            android:id="@+id/veganCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:checked="false"
+            android:onClick="tagsCheckbox"
+            android:text="Vegan"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/preferenceText" />
 
-            <CheckBox
-                android:id="@+id/lactoCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="tagsCheckbox"
-                android:text="Lactose Free"
-                app:layout_constraintStart_toEndOf="@+id/veganCheck"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <CheckBox
-                android:id="@+id/eggCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="tagsCheckbox"
-                android:text="Egg Free"
-                app:layout_constraintStart_toEndOf="@+id/gfCheck"
-                app:layout_constraintTop_toBottomOf="@+id/nutCheck" />
-
-        </android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/preferenceText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Is your recipe for any specific dietary practice?"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 
@@ -177,14 +150,75 @@
         android:id="@+id/confirmRecipeButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@color/AccentGenericButtonColor"
         android:onClick="setToDatabase"
         android:text="Confirm"
+        android:textAllCaps="true"
         android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6">
+
+        <CheckBox
+            android:id="@+id/normalCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:enabled="false"
+            android:onClick="tagsCheckbox"
+            android:text="Normal"
+            app:layout_constraintStart_toEndOf="@+id/simpleCheck"
+            app:layout_constraintTop_toBottomOf="@+id/simplicityText" />
+
+        <CheckBox
+            android:id="@+id/hardCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:enabled="false"
+            android:onClick="tagsCheckbox"
+            android:text="Hard"
+            app:layout_constraintStart_toEndOf="@+id/normalCheck"
+            app:layout_constraintTop_toBottomOf="@+id/simplicityText" />
+
+        <CheckBox
+            android:id="@+id/simpleCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:enabled="false"
+            android:onClick="tagsCheckbox"
+            android:text="Simple"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/simplicityText" />
+
+        <TextView
+            android:id="@+id/simplicityText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="How simple is your recipe? *"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

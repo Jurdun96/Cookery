@@ -2,10 +2,10 @@ package eatec.cookery;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -53,7 +53,7 @@ public class CreatorActivity extends AppCompatActivity {
             }
         });
         //Add new Recipe
-        FloatingActionButton addRecipeButton = (FloatingActionButton) findViewById(R.id.addNewRecipe);
+        Button addRecipeButton = (Button) findViewById(R.id.addNewRecipe);
         addRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

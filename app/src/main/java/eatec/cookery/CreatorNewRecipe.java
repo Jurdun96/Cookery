@@ -1,6 +1,7 @@
 package eatec.cookery;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +31,7 @@ public class CreatorNewRecipe extends AppCompatActivity {
         setContentView(R.layout.activity_creator_new_recipe);
 
         tags = new ArrayList<>();
+        tags.clear();
         // get an instance of the authentication
         mAuth = FirebaseAuth.getInstance();
         //get reference: recipes
@@ -61,9 +65,33 @@ public class CreatorNewRecipe extends AppCompatActivity {
 
         Log.i("tags:", strTagList);
 
-        //add to database the 3 inputs.
-        addToDatabase(recipeName, recipeDescription, strTagList);
+        Boolean recipeNameOkay = false;
+        Boolean recipeDescriptionOkay = false;
+        TextView recipeNameText = findViewById(R.id.recipenameTV);
+        if(recipeName.length() < 12) {
+            Toast.makeText(this, "Oops... the recipe's name is too short!", Toast.LENGTH_SHORT).show();
+            recipeNameText.setTextColor(Color.RED);
+        }
+        else if (recipeName.length() > 12) {
+            recipeNameText.setTextColor(Color.DKGRAY);
+            recipeNameOkay = true;
+        }
+
+        TextView recipeDescriptionText = findViewById(R.id.recipeDescriptionTV);
+        if(recipeDescription.length() < 24 ){
+            Toast.makeText(this, "Oops... the recipe's description is too short!", Toast.LENGTH_SHORT).show();
+            recipeDescriptionText.setTextColor(Color.RED);
+        }
+        else if (recipeDescription.length() > 24) {
+            recipeDescriptionText.setTextColor(Color.DKGRAY);
+            recipeDescriptionOkay = true;
+        }
+
+        if (recipeNameOkay && recipeDescriptionOkay) {
+            addToDatabase(recipeName, recipeDescription, strTagList);
+        }
     }
+
     public void tagsCheckbox(View view) {
         boolean checked = ((CheckBox) view).isChecked();
         //TODO add a clear button to clear all selections
@@ -71,32 +99,38 @@ public class CreatorNewRecipe extends AppCompatActivity {
             case R.id.veganCheck:
                 if(checked)
                     tags.add("vegan");
-                view.setEnabled(false);
+                else
+                    tags.remove("vegan");
                 break;
             case R.id.vegCheck:
                 if(checked)
                     tags.add("veg");
-                view.setEnabled(false);
+                else
+                    tags.remove("veg");
                 break;
-            case R.id.gfCheck:
+            case R.id.fishCheck:
                 if(checked)
-                    tags.add("gf");
-                view.setEnabled(false);
+                    tags.add("fish");
+                else
+                    tags.remove("fish");
                 break;
-            case R.id.nutCheck:
+            case R.id.normalCheck:
                 if (checked)
-                    tags.add("nuts");
-                view.setEnabled(false);
+                    tags.add("normal");
+                else
+                    tags.remove("normal");
                 break;
-            case R.id.eggCheck:
+            case R.id.hardCheck:
                 if(checked)
-                    tags.add("egg");
-                view.setEnabled(false);
+                    tags.add("hard");
+                else
+                    tags.remove("hard");
                 break;
-            case R.id.lactoCheck:
+            case R.id.simpleCheck:
                 if (checked)
-                    tags.add("lacto");
-                view.setEnabled(false);
+                    tags.add("simple");
+                else
+                    tags.remove("simple");
                 break;
         }
     }

@@ -1,6 +1,7 @@
 package eatec.cookery;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -11,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,10 +31,9 @@ public class RecipesActivity extends AppCompatActivity {
 
     private DatabaseReference Database;
 
-    private CardView veganCard;
-    private CardView noneCard;
-    private CardView fishCard;
-    private CardView vegetarianCard;
+    private CardView veganCard, noneCard, fishCard, vegetarianCard;
+
+    private TextView vegText,noneText,fishText,veganText;
 
     private EditText searchBar;
 
@@ -46,10 +45,20 @@ public class RecipesActivity extends AppCompatActivity {
         //get database
         Database = FirebaseDatabase.getInstance().getReference("recipes");
 
+        //innit the filter cards
         veganCard = findViewById(R.id.veganCard);
         noneCard = findViewById(R.id.noneCard);
         fishCard = findViewById(R.id.fishCard);
         vegetarianCard = findViewById(R.id.vegCard);
+
+        vegText = findViewById(R.id.vegText);
+        vegText.setTextColor(Color.DKGRAY);
+        noneText = findViewById(R.id.noneText);
+        noneText.setTextColor(Color.GREEN);
+        fishText = findViewById(R.id.fishText);
+        fishText.setTextColor(Color.DKGRAY);
+        veganText = findViewById(R.id.veganText);
+        veganText.setTextColor(Color.DKGRAY);
 
         //init and add null tag as a default
         tagList = new ArrayList<>();
@@ -79,7 +88,6 @@ public class RecipesActivity extends AppCompatActivity {
                             //Clear previous list
                             listRecipesList.clear();
                             String strTagList = String.valueOf(strTaglistBuilder);
-                            Toast.makeText(RecipesActivity.this, strTagList, Toast.LENGTH_SHORT).show();
                             //Iterate through the nodes
                             for(DataSnapshot recipeSnapshot : dataSnapshot.getChildren()){
                                 //get recipe
@@ -142,28 +150,44 @@ public class RecipesActivity extends AppCompatActivity {
     }
     public void setVeganCard(View v) {
         if (tagList.contains("vegan")){
+            veganText.setTextColor(Color.DKGRAY);
             tagList.remove("vegan");
         } else {
+            veganText.setTextColor(Color.GREEN);
+            noneText.setTextColor(Color.DKGRAY);
             tagList.add("vegan");
             tagList.remove("none");
         }
     }
     public void setVegetarianCard(View v) {
         if (tagList.contains("veg")){
+            vegText.setTextColor(Color.DKGRAY);
             tagList.remove("veg");
         } else {
+            vegText.setTextColor(Color.GREEN);
+            noneText.setTextColor(Color.DKGRAY);
             tagList.add("veg");
             tagList.remove("none");
         }
     }
     public void setNoneCard(View v) {
         tagList.clear();
+
+        veganText.setTextColor(Color.DKGRAY);
+        vegText.setTextColor(Color.DKGRAY);
+        fishText.setTextColor(Color.DKGRAY);
+        noneText.setTextColor(Color.GREEN);
+
         tagList.add("none");
+
     }
     public void setFishCard(View v) {
         if (tagList.contains("fish")){
+            fishText.setTextColor(Color.DKGRAY);
             tagList.remove("fish");
         } else {
+            fishText.setTextColor(Color.GREEN);
+            noneText.setTextColor(Color.DKGRAY);
             tagList.add("fish");
             tagList.remove("none");
         }

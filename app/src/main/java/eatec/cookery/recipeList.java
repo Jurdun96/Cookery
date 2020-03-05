@@ -41,6 +41,7 @@ class recipeList extends ArrayAdapter<recipe> {
         //init Recipe
         recipe recipe = recipes.get(position);
         //Set Data
+        recipeImage.setImageResource(R.drawable.veganimage);
         recipeID.setText(recipe.getRecipeID());
         titleText.setText(recipe.getRecipeName());
         descriptionText.setText(recipe.getRecipeDescription());
