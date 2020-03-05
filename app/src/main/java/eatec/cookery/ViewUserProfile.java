@@ -1,5 +1,6 @@
 package eatec.cookery;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -22,8 +23,9 @@ import java.util.List;
 
 public class ViewUserProfile extends AppCompatActivity {
     //Firebase
-    private DatabaseReference usersDatabase;
-    private DatabaseReference followingDatabase;
+    private DatabaseReference usersRef;
+    private DatabaseReference followingRef;
+    private DatabaseReference reportsRef;
 
     private String currentUserUID;
     private String UID;
@@ -36,14 +38,19 @@ public class ViewUserProfile extends AppCompatActivity {
     private TextView followButton;
     private TextView unfollowButton;
 
+    private TextView reportButton;
+
     private user user;
     private List<String> usersList;
+
+    private List<String> reportsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user_profile);
 
+        //get the userID from last activity
         UID = getIntent().getStringExtra("userID");
         currentUserUID = FirebaseAuth.getInstance().getUid();
 
@@ -54,23 +61,38 @@ public class ViewUserProfile extends AppCompatActivity {
         rank = findViewById(R.id.cookeryRankText);
         username = findViewById(R.id.usernameText);
 
-        usersDatabase = FirebaseDatabase.getInstance().getReference("users");
-        followingDatabase = FirebaseDatabase.getInstance().getReference("following");
+        reportButton = findViewById(R.id.reportUserButton);
 
         followButton = findViewById(R.id.followUserButton);
         unfollowButton = findViewById(R.id.unfollowUserButton);
 
+        //init database
+        usersRef = FirebaseDatabase.getInstance().getReference("users");
+        followingRef = FirebaseDatabase.getInstance().getReference("following");
+        reportsRef = FirebaseDatabase.getInstance().getReference("reports");
 
+
+        //init lists
         usersList = new ArrayList<>();
+
+        reportsList = new ArrayList<>();
+
+        //report button onclick
+        reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reportUser();
+            }
+        });
 
     }
     @Override
     protected void onStart() {
         super.onStart();
-        //hides unfollow button if there is no following list accociated with this account
-        if(usersList.size() == 0) {unfollowButton.setVisibility(View.INVISIBLE);}
+
+        // FIRST QUERY: GET USERS DATA
         //Get the user tree data
-        Query query = usersDatabase.orderByChild("userID").equalTo(UID);
+        Query query = usersRef.orderByChild("userID").equalTo(UID);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -98,8 +120,12 @@ public class ViewUserProfile extends AppCompatActivity {
                 Toast.makeText(ViewUserProfile.this, "There was an error regarding this account", Toast.LENGTH_SHORT).show();
             }
         });
+
+        //SECOND QUERY: GET CLIENTS FOLLOWING TO CHECK IF THIS CLIENT IS FOLLOWING THIS USER
+        //hides unfollow button if there is no following list accociated with this account
+        if(usersList.size() == 0) {unfollowButton.setVisibility(View.INVISIBLE);}
         //in the following tree, gets the current users tree.
-        Query followingRef = followingDatabase.child(currentUserUID);
+        Query followingRef = this.followingRef.child(currentUserUID);
         followingRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -124,17 +150,43 @@ public class ViewUserProfile extends AppCompatActivity {
 
             }
         });
+
+        //THIRD QUERY: HANDLE IF THE CLIENT HAS REPORTED THIS USER
+        //Same as second query just for reports instead
+        Query reportedRef = this.reportsRef.child(currentUserUID);
+        reportedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot reports: dataSnapshot.getChildren()) {
+                    //gets the children in this tree
+                    //adds the IDs to this usersID local variable
+                    String thisUserID = reports.getKey();
+                    //adds the local to the list
+                    if(thisUserID!=null) reportsList.add(thisUserID);
+                    //react ui if the user has already been reported
+                    if (reportsList.contains(UID)) {
+                        hideReport();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     public void followUser(View view) {
-        followingDatabase.child(currentUserUID).child(UID).setValue(user.getUserName());
-        clearList();
+        followingRef.child(currentUserUID).child(UID).setValue(user.getUserName());
+        clearUserList();
     }
     public void unFollowUser(View view){
-        followingDatabase.child(currentUserUID).child(UID).removeValue();
-        clearList();
+        followingRef.child(currentUserUID).child(UID).removeValue();
+        clearUserList();
     }
-    public void clearList() {
+    public void clearUserList() {
         usersList.clear();
     }
     public void showFollow() {
@@ -147,8 +199,29 @@ public class ViewUserProfile extends AppCompatActivity {
 
     }
 
+    public void hideReport() {
+        reportButton.setTextColor(Color.DKGRAY);
+        reportButton.setEnabled(false);
+    }
+    public void reportUser() {
+        reportsRef.child(currentUserUID).child(UID).setValue(user.getUserName());
 
-    public void reportUser() {}
+        Query query = usersRef.orderByChild("userID").equalTo(UID);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //get user details from database
+                user = dataSnapshot.child(UID).getValue(user.class);
+                int cStrikes = user.getStrikes();
+                int nStrikes = cStrikes + 1;
+                usersRef.child(UID).child("strikes").setValue(nStrikes);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
 
     @Override
     public void onBackPressed() {

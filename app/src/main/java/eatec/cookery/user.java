@@ -19,9 +19,10 @@ class user {
 
     private Map<String, String> following;
 
+    private int strikes;
     public user() {}
 
-    public user(String userID, String email, String userName, String profilePicture, String bio, Map<String, String> following, int cookeryRank) {
+    public user(String userID, String email, String userName, String profilePicture, String bio, Map<String, String> following, int cookeryRank, int strikes) {
         this.userID = userID;
         this.email = email;
         this.userName = userName;
@@ -42,6 +43,8 @@ class user {
     public String getEmail() {
         return email;
     }
+
+    public int getStrikes() {return strikes;}
 
     public String getProfilePicture() {
         return profilePicture;

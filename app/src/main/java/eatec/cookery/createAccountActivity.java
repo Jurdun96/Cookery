@@ -71,7 +71,7 @@ public class createAccountActivity extends AppCompatActivity {
     public void addDetailsToDatabase (String userID, String email, String profilePicture, String username, int cookeryRank) {
         //create a new user object
         Map<String,String> following = new HashMap<>();
-        user newUser = new user(userID, email, username, profilePicture, "", following, cookeryRank);
+        user newUser = new user(userID, email, username, profilePicture, "", following, cookeryRank, 0);
         //add that user object to the database
         database.child(userID).setValue(newUser);
         followingDatabase.child(userID).child("default").setValue("default");

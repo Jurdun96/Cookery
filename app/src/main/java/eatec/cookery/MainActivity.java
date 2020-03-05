@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 TextView rank = findViewById(R.id.cookeryRankTextBox);
                 ImageView userImage = findViewById(R.id.userImage);
                 //Get the current users Unique ID. Used to find them in the database.
+
                 UID = mAuth.getCurrentUser().getUid();
                 //Set their details in the User details container.
                 user user = dataSnapshot.child(UID).getValue(user.class);
@@ -122,12 +123,18 @@ public class MainActivity extends AppCompatActivity {
         TextView username = findViewById(R.id.usernameTextBox);
         TextView login = findViewById(R.id.loginTextBox);
         TextView rank = findViewById(R.id.cookeryRankTextBox);
-        if (mAuth.getCurrentUser() != null) {getUserDetails();}
+
+
+
         if (currentUser != null) {
             username.setVisibility(View.VISIBLE);
             rank.setVisibility(View.VISIBLE);
 
             login.setVisibility(View.INVISIBLE);
+
+            getUserDetails();
+
+            new checkStrikes(MainActivity.this);
         }
         else {
             startActivity(new Intent(MainActivity.this, LoginPreActivity.class));

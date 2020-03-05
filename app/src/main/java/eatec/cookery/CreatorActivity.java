@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -24,8 +25,13 @@ public class CreatorActivity extends AppCompatActivity {
 
     private ListView viewRecipeList;
     private ArrayList<recipe> recipeList;
-    private DatabaseReference Database;
+    private DatabaseReference recipesDatabase;
+    private DatabaseReference stepsDatabase;
     private FirebaseAuth mAuth;
+
+    private Button createButton;
+    private String recipeID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +40,13 @@ public class CreatorActivity extends AppCompatActivity {
         //Highlight the home buttons to indicated current page;
         highlightMenuIcon();
         //get recipes from database reference and the log in information
-        Database = FirebaseDatabase.getInstance().getReference("recipes");
+        recipesDatabase = FirebaseDatabase.getInstance().getReference("recipes");
+        stepsDatabase = FirebaseDatabase.getInstance().getReference("steps");
         mAuth = FirebaseAuth.getInstance();
+
+        //innit objects
+        createButton = findViewById(R.id.addNewRecipe);
+
         //Init List
         recipeList = new ArrayList<>();
         viewRecipeList = findViewById(R.id.listView1);
@@ -52,11 +63,63 @@ public class CreatorActivity extends AppCompatActivity {
                 startActivity(mIntent);
             }
         });
-        //Add new Recipe
+
+        //Function to delete a recipe and corresponding steps
+        viewRecipeList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                createButton.setBackgroundColor(getResources().getColor(R.color.googleButtonColor));
+                createButton.setText("Delete Recipe");
+                final TextView recipeIDTV = view.findViewById(R.id.recipeIDTextView);
+                final String recipeID = recipeIDTV.getText().toString();
+                Toast.makeText(CreatorActivity.this, recipeID, Toast.LENGTH_SHORT).show();
+                createButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //remove the recipe
+                        recipesDatabase.child(recipeID).removeValue();
+                        //remove the steps
+                        Query stepsQuery = stepsDatabase.orderByChild(recipeID);
+                        stepsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot stepsSnapshot: dataSnapshot.getChildren()) {
+                                    step step = stepsSnapshot.getValue(step.class);
+                                    if(step.getRecipeID().equals(recipeID))
+                                        stepsSnapshot.getRef().removeValue();
+                                }
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        setCreateButton();
+                    }
+                });
+                return true;
+            }
+        });
+
+
+        //Default add recipe behaviour
         Button addRecipeButton = (Button) findViewById(R.id.addNewRecipe);
         addRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(CreatorActivity.this, CreatorNewRecipe.class));
+            }
+        });
+    }
+
+    public void setCreateButton() {
+        //If the user has used the delete function, this method returns the button back to normal
+        createButton.setBackgroundColor(getResources().getColor(R.color.AccentGenericButtonColor));
+        createButton.setText("Create Recipe");
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 startActivity(new Intent(CreatorActivity.this, CreatorNewRecipe.class));
             }
         });
@@ -67,7 +130,7 @@ public class CreatorActivity extends AppCompatActivity {
         super.onStart();
         //query to just associate the table with that user; Meaning if someone else adds a recipe it on their account
         //it will not affect this list
-        Query query = Database.orderByChild("userID").equalTo(mAuth.getCurrentUser().getUid());
+        Query query = recipesDatabase.orderByChild("userID").equalTo(mAuth.getCurrentUser().getUid());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -130,4 +193,12 @@ public class CreatorActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        if(createButton.getText().equals("Delete Recipe")){
+            setCreateButton();
+        }else {
+            super.onBackPressed();
+        }
+    }
 }
