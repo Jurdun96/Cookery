@@ -11,6 +11,8 @@
         android:id="@+id/stepsList"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -25,37 +27,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
         android:background="@color/genericButtonColor"
         android:onClick="finishCreating"
         android:text="Confirm"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/addStepButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:background="@color/AccentGenericButtonColor"
         android:text="Add Step"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/finishEditing"
-        app:layout_constraintEnd_toStartOf="@id/finishEditing" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:background="@color/AccentGenericButtonColor"
         android:text="Add Timer"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/finishEditing"
-        app:layout_constraintStart_toEndOf="@+id/finishEditing" />
+        app:layout_constraintStart_toEndOf="@+id/addStepButton" />
 
 </android.support.constraint.ConstraintLayout>

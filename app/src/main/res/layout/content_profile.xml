@@ -27,6 +27,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageButton
                 android:id="@+id/ppImageButton"
                 android:layout_width="128dp"
@@ -118,8 +126,6 @@
                 android:layout_marginStart="32dp"
                 android:background="@android:color/transparent"
                 android:ems="10"
-                android:focusable="auto"
-                android:focusableInTouchMode="true"
                 android:gravity="fill_vertical"
                 android:hint="Enter your biography here for other users to learn more about you!"
                 android:inputType="textMultiLine"

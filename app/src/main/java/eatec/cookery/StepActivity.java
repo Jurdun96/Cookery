@@ -6,11 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class StepActivity extends AppCompatActivity {
     private List<step> listStepsList;
     private DatabaseReference Database;
     private String recipeID;
-
+    private stepList stepAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +34,9 @@ public class StepActivity extends AppCompatActivity {
 
         //init steps list
         listStepsList = new ArrayList<>();
-
+         stepAdapter = new stepList(StepActivity.this, listStepsList);
         //init steps List view
         viewStepsList = findViewById(R.id.stepsList);
-
         addStepButton = (Button) findViewById(R.id.addStepButton);
         addStepButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,17 +49,53 @@ public class StepActivity extends AppCompatActivity {
         String stepID = Database.push().getKey();
         step newStep = new step(recipeID, stepID, "stepImage", "","");
         Database.child(stepID).setValue(newStep);
+        getData();
     }
     @Override
     protected void onStart() {
-        //receives all the recipes and adds them to the list
         super.onStart();
-        Database.addValueEventListener(new ValueEventListener() {
+        getData();
+    }
+
+    public void getData() {
+        //receives all the recipes and adds them to the list
+        viewStepsList.setAdapter(stepAdapter);
+        Database.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                step step = dataSnapshot.getValue(step.class);
+                if(step.getRecipeID().equals(recipeID)) {
+                    listStepsList.add(step);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                stepAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+/*
+        viewStepsList.setAdapter(stepAdapter);
+        Database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //Clear previous list
+                //Clear the list
                 listStepsList.clear();
-
                 //Iterate through the nodes
                 for(DataSnapshot stepSnapshot : dataSnapshot.getChildren()){
                     //get recipe
@@ -75,17 +110,15 @@ public class StepActivity extends AppCompatActivity {
                 //Attatch adapter to listview
                 viewStepsList.setAdapter(stepAdapter);
             }
-
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+            public void onCancelled(DatabaseError databaseError) {}
+        });*/
     }
 
     public void finishCreating(View view) {
         //give xp
         new giveRep(this, "Recipe added: 1 reputation gained!", 1);
         finish();
+
     }
 }

@@ -54,7 +54,7 @@ public class RecipesActivity extends AppCompatActivity {
         vegText = findViewById(R.id.vegText);
         vegText.setTextColor(Color.DKGRAY);
         noneText = findViewById(R.id.noneText);
-        noneText.setTextColor(Color.GREEN);
+        noneText.setTextColor(getResources().getColor(R.color.genericButtonColor));
         fishText = findViewById(R.id.fishText);
         fishText.setTextColor(Color.DKGRAY);
         veganText = findViewById(R.id.veganText);
@@ -62,7 +62,6 @@ public class RecipesActivity extends AppCompatActivity {
 
         //init and add null tag as a default
         tagList = new ArrayList<>();
-
         searchBar = findViewById(R.id.SearchBar);
         //get data on this page through the search bar 1 time.
         searchBar.setOnKeyListener(new View.OnKeyListener() {
@@ -153,22 +152,24 @@ public class RecipesActivity extends AppCompatActivity {
             veganText.setTextColor(Color.DKGRAY);
             tagList.remove("vegan");
         } else {
-            veganText.setTextColor(Color.GREEN);
+            veganText.setTextColor(getResources().getColor(R.color.genericButtonColor));
             noneText.setTextColor(Color.DKGRAY);
             tagList.add("vegan");
             tagList.remove("none");
         }
+        listEmpty();
     }
     public void setVegetarianCard(View v) {
         if (tagList.contains("veg")){
             vegText.setTextColor(Color.DKGRAY);
             tagList.remove("veg");
         } else {
-            vegText.setTextColor(Color.GREEN);
+            vegText.setTextColor(getResources().getColor(R.color.genericButtonColor));
             noneText.setTextColor(Color.DKGRAY);
             tagList.add("veg");
             tagList.remove("none");
         }
+        listEmpty();
     }
     public void setNoneCard(View v) {
         tagList.clear();
@@ -176,7 +177,7 @@ public class RecipesActivity extends AppCompatActivity {
         veganText.setTextColor(Color.DKGRAY);
         vegText.setTextColor(Color.DKGRAY);
         fishText.setTextColor(Color.DKGRAY);
-        noneText.setTextColor(Color.GREEN);
+        noneText.setTextColor(getResources().getColor(R.color.genericButtonColor));
 
         tagList.add("none");
 
@@ -186,10 +187,18 @@ public class RecipesActivity extends AppCompatActivity {
             fishText.setTextColor(Color.DKGRAY);
             tagList.remove("fish");
         } else {
-            fishText.setTextColor(Color.GREEN);
+            fishText.setTextColor(getResources().getColor(R.color.genericButtonColor));
             noneText.setTextColor(Color.DKGRAY);
             tagList.add("fish");
             tagList.remove("none");
+        }
+        listEmpty();
+    }
+
+    public void listEmpty() {
+        //Checks that if the list is empty then it will set the filter to none UI;
+        if(tagList.isEmpty()){
+            noneText.setTextColor(getResources().getColor(R.color.genericButtonColor));
         }
     }
 

@@ -55,7 +55,7 @@
                 android:elevation="10dp"
                 android:onClick="setVeganCard"
                 app:cardCornerRadius="5dp"
-                app:contentPadding="5dp"
+                app:contentPadding="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -65,7 +65,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Vegan"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textStyle="bold" />
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
@@ -76,7 +77,7 @@
                 android:elevation="10dp"
                 android:onClick="setNoneCard"
                 app:cardCornerRadius="5dp"
-                app:contentPadding="5dp"
+                app:contentPadding="10dp"
                 app:layout_constraintStart_toEndOf="@+id/fishCard"
                 app:layout_constraintTop_toTopOf="@+id/fishCard">
 
@@ -84,9 +85,10 @@
                     android:id="@+id/noneText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="None"
+                    android:text="No Filter"
                     android:textAlignment="center"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    android:textStyle="bold" />
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
@@ -97,7 +99,7 @@
                 android:elevation="10dp"
                 android:onClick="setFishCard"
                 app:cardCornerRadius="5dp"
-                app:contentPadding="5dp"
+                app:contentPadding="10dp"
                 app:layout_constraintStart_toEndOf="@+id/vegCard"
                 app:layout_constraintTop_toTopOf="@+id/vegCard">
 
@@ -106,7 +108,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pescetarian"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textStyle="bold" />
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
@@ -118,7 +121,7 @@
                 android:onClick="setVegetarianCard"
                 android:padding="20dp"
                 app:cardCornerRadius="5dp"
-                app:contentPadding="5dp"
+                app:contentPadding="10dp"
                 app:layout_constraintStart_toEndOf="@+id/veganCard"
                 app:layout_constraintTop_toTopOf="@+id/veganCard">
 
@@ -127,7 +130,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Vegetarian"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textStyle="bold" />
             </android.support.v7.widget.CardView>
         </android.support.constraint.ConstraintLayout>
 

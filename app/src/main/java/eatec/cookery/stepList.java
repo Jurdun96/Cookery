@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,16 @@ public class stepList extends ArrayAdapter<step>{
     private DatabaseReference database;
     private Timer timer1,timer2;
 
+    //old
+    private TextView descriptionText;
+    private TextView longDescriptionText;
+    //New
+    private String newDescriptionText;
+    private String newLongDescriptionText;
+
+    private step step;
+    private String stepID;
+
     public stepList(Activity context, List<step> steps) {
         super(context, R.layout.fragment_step, steps);
         this.context = context;
@@ -43,7 +54,6 @@ public class stepList extends ArrayAdapter<step>{
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         //get database
         database = FirebaseDatabase.getInstance().getReference("steps");
 
@@ -54,16 +64,14 @@ public class stepList extends ArrayAdapter<step>{
         View listViewItem = inflater.inflate(R.layout.fragment_step,null,true);
 
         //step objects
-        final TextView descriptionText = (TextView) listViewItem.findViewById(R.id.stepRecipeShortText);
-        final TextView longDescriptionText = (TextView) listViewItem.findViewById(R.id.stepRecipeLongText);
+        descriptionText = (TextView) listViewItem.findViewById(R.id.stepRecipeShortText);
+        longDescriptionText = (TextView) listViewItem.findViewById(R.id.stepRecipeLongText);
         ImageView stepImage = listViewItem.findViewById(R.id.stepImage);
-
-
         //init step
-        final step step = steps.get(position);
+        step = steps.get(position);
 
         //get stepID
-        final String stepID = step.getStepID();
+        stepID = step.getStepID();
 
         //Set Data
         descriptionText.setText(step.getStepDescription());
@@ -91,7 +99,7 @@ public class stepList extends ArrayAdapter<step>{
                 timer1.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        String newDescriptionText = descriptionText.getText().toString();
+                        newDescriptionText = descriptionText.getText().toString();
                         addToDatabase(stepID,"stepDescription", newDescriptionText);
                     }
                 }, 600);
@@ -127,5 +135,12 @@ public class stepList extends ArrayAdapter<step>{
     //Add the data the user is entering to the database; there is a 600ms delay on the period between the user stopping typing and the data being updated.
     private void addToDatabase(String id, String location, String text) {
         database.child(id).child(location).setValue(text);
+    }
+
+    private void updateList(List<step> newList) {
+        Log.i("adapter", "notified");
+        steps.clear();
+        steps.addAll(newList);
+        this.notifyDataSetChanged();
     }
 }

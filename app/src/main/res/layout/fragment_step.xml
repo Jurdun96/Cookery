@@ -7,28 +7,50 @@
     android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="344dp"
+        android:layout_height="467dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/stepRecipeLongText"
+        <ImageButton
+            android:id="@+id/stepImage"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
+            android:layout_height="287dp"
+            android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stepRecipeLongTextTV" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/imageUploadText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload an image"
+            app:layout_constraintBottom_toBottomOf="@+id/stepImage"
+            app:layout_constraintEnd_toEndOf="@+id/stepImage"
+            app:layout_constraintStart_toStartOf="@+id/stepImage"
+            app:layout_constraintTop_toTopOf="@+id/stepImage" />
+
+        <TextView
+            android:id="@+id/stepRecipeShortTextTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Brief Description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stepImage" />
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/stepRecipeShortText"
@@ -42,35 +64,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/stepRecipeShortTextTV" />
 
-        <ImageButton
-            android:id="@+id/stepImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@android:drawable/screen_background_light_transparent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/cookery_logo" />
-
-        <TextView
-            android:id="@+id/stepRecipeShortTextTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:text="Short Description"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stepRecipeLongText" />
-
         <TextView
             android:id="@+id/stepRecipeLongTextTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:text="Long Description"
+            android:layout_marginTop="8dp"
+            android:text="Detailed Description"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stepImage" />
+            app:layout_constraintTop_toBottomOf="@+id/stepRecipeShortText" />
+
+        <EditText
+            android:id="@+id/stepRecipeLongText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:ems="10"
+            android:inputType="textMultiLine|textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stepRecipeLongTextTV" />
+
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
