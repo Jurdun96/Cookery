@@ -124,10 +124,10 @@ public class ProfileActivity extends AppCompatActivity {
             int imageSize = returnCursor.getColumnIndex(OpenableColumns.SIZE);
             returnCursor.moveToFirst();
 
-            if(returnCursor.getLong(imageSize) > 1000000) //Ensure that there is a 1mb limit on upload sizes
+            if(returnCursor.getLong(imageSize) > 3000000) //Profile Picture size limit
             {
                 //Fail, upload aborted
-                Toast.makeText(this, "Please select a smaller image", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "3MB Max", Toast.LENGTH_LONG).show();
             } else {
                 //Continue with upload
                 uploadFile();

@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -41,7 +43,7 @@ class recipeList extends ArrayAdapter<recipe> {
         //init Recipe
         recipe recipe = recipes.get(position);
         //Set Data
-        recipeImage.setImageResource(R.drawable.veganimage);
+        Picasso.get().load(recipe.getRecipeImage()).placeholder(R.drawable.veganimage).into(recipeImage);
         recipeID.setText(recipe.getRecipeID());
         titleText.setText(recipe.getRecipeName());
         descriptionText.setText(recipe.getRecipeDescription());

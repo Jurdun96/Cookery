@@ -3,27 +3,21 @@ package eatec.cookery;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SocialActivity extends AppCompatActivity {
 
-    private ListView viewUserList;
+    private RecyclerView viewUserList;
     private List<user> listUserList;
 
-    private DatabaseReference database;
+    private SocialAdapter socialAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,22 +26,13 @@ public class SocialActivity extends AppCompatActivity {
         //Highlight the home buttons to indicated current page;
         highlightMenuIcon();
 
-        database = FirebaseDatabase.getInstance().getReference("users");
         listUserList = new ArrayList<>();
-        viewUserList = findViewById(R.id.userListLV);
+        socialAdapter = new SocialAdapter(listUserList);
+        viewUserList = findViewById(R.id.userRView);
+        viewUserList.setHasFixedSize(true);
+        viewUserList.setAdapter(socialAdapter);
+        viewUserList.setLayoutManager(new LinearLayoutManager(this));
 
-        viewUserList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                TextView userIDTV = view.findViewById(R.id.userIDTV);
-                String userID = userIDTV.getText().toString();
-
-                Intent mIntent = new Intent(SocialActivity.this, ViewUserProfile.class);
-                mIntent.putExtra("userID", userID);
-                startActivity(mIntent);
-            }
-        });
     }
 
     public void highlightMenuIcon() {
@@ -66,31 +51,6 @@ public class SocialActivity extends AppCompatActivity {
         ImageView myRecipesButton = findViewById(R.id.myRecipesButton);
         myRecipesButton.setImageResource(R.drawable.book);
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        database.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                listUserList.clear();
-
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    user user = userSnapshot.getValue(user.class);
-                    listUserList.add(user);
-                }
-
-                userList userAdapter = new userList(SocialActivity.this, listUserList);
-                viewUserList.setAdapter(userAdapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
     public void openCreatorActivity(View view) {
         startActivity(new Intent(SocialActivity.this, CreatorActivity.class));
         overridePendingTransition(0,0);

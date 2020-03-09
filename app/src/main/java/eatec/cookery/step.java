@@ -21,6 +21,26 @@ public class step {
         this.stepLongDescription = stepLongDescription;
     }
 
+    public void setRecipeID(String recipeID) {
+        this.recipeID = recipeID;
+    }
+
+    public void setStepID(String stepID) {
+        this.stepID = stepID;
+    }
+
+    public void setStepImage(String stepImage) {
+        this.stepImage = stepImage;
+    }
+
+    public void setStepDescription(String stepDescription) {
+        this.stepDescription = stepDescription;
+    }
+
+    public void setStepLongDescription(String stepLongDescription) {
+        this.stepLongDescription = stepLongDescription;
+    }
+
     public String getRecipeID() {
         return recipeID;
     }
