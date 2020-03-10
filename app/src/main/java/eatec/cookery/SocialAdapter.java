@@ -20,6 +20,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.ViewHolder> {
 
 
@@ -128,7 +130,9 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.ViewHolder
         mUsername.setText(user.getUserName());
         mCookeryRank.setText(user.convertCookeryRank());
         mUserIDTextView.setText(user.getUserID());
-        Picasso.get().load(user.getProfilePicture()).into(mImageView);
+        Picasso.get().load(user.getProfilePicture())
+                .transform(new CropCircleTransformation())
+                .into(mImageView);
     }
 
     @Override

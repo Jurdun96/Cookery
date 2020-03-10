@@ -17,6 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 Picasso.get()
                         .load(user.getProfilePicture())
                         .placeholder(R.drawable.user)
+                        .transform(new CropCircleTransformation())
                         .into(userImage);
             }
 

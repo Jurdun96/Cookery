@@ -4,17 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,31 +31,73 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
     private ArrayList<String> mKeys = new ArrayList<>();
 
     private Context mContext;
-    private FirebaseAuth mAuth;
     private String mTagList;
     private Query mQuery;
+    private EditText mSearchBar;
 
-    public RecipeAdaptor(List<recipe> recipes, Query query, String strTagList){
+    private DatabaseReference userRef;
+    private user mUser;
+
+    public RecipeAdaptor(List<recipe> recipes, Query query, String strTagList, EditText searchBar){
         mRecipes = recipes;
         mQuery = query;
+        mSearchBar = searchBar;
         mTagList = strTagList;
-        mAuth = FirebaseAuth.getInstance();
-
+        mUser = new user();
+        userRef = FirebaseDatabase.getInstance().getReference("users");
         mQuery.addChildEventListener(new RecipeAdaptor.RecipeChildEventListener());
     }
 
     class RecipeChildEventListener implements ChildEventListener {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            recipe recipe = dataSnapshot.getValue(recipe.class);
-            if (mTagList.toLowerCase().contains(recipe.getTags().toLowerCase())) {
-                mRecipes.add(recipe);
-                notifyDataSetChanged();
+            final recipe recipe = dataSnapshot.getValue(recipe.class);
+            //User search??
+            if(mSearchBar.getText().toString().contains("@")) {
+                Query query = userRef.orderByKey().equalTo(recipe.getUserID());
 
-                String key = dataSnapshot.getKey();
-                mKeys.add(key);
+                final String newSearchBar = mSearchBar.getText().toString().replace("@","");
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                            user user = userSnapshot.getValue(user.class);
+                            if(user.getUserName().toLowerCase().contains(newSearchBar.toLowerCase())) {
+                                Log.i("2", user.getUserName().toLowerCase());
+                                Log.i("2", newSearchBar.toLowerCase());
+                                mRecipes.add(recipe);
+                                notifyDataSetChanged();
+
+                                String key = dataSnapshot.getKey();
+                                mKeys.add(key);
+                            }
+                            else {}
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
             }
+            //Normal Search??
+            else {
+                if (mTagList.toLowerCase().contains(recipe.getTags().toLowerCase())) {
+                    if (recipe.getRecipeName().toLowerCase().contains(mSearchBar.getText().toString().toLowerCase())
+                            || recipe.getRecipeDescription().toLowerCase().contains(mSearchBar.getText().toString().toLowerCase()))
+                    {
+                        mRecipes.add(recipe);
+                        notifyDataSetChanged();
 
+                        String key = dataSnapshot.getKey();
+                        mKeys.add(key);
+                    }
+                }
+            }
         }
 
         @Override

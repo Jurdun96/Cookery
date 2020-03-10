@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,6 +57,7 @@ public class CreatorNewRecipe extends AppCompatActivity {
         setContentView(R.layout.activity_creator_new_recipe);
 
         mProgressSpinner = findViewById(R.id.progressSpinner);
+        mProgressSpinner.setVisibility(View.GONE);
 
         tags = new ArrayList<>();
         tags.clear();
@@ -72,6 +74,16 @@ public class CreatorNewRecipe extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openFileChooser();
+            }
+        });
+
+        Button cancelButton = findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mIntent = new Intent(CreatorNewRecipe.this, CreatorActivity.class);
+                startActivity(mIntent);
+                finish();
             }
         });
 
@@ -243,10 +255,7 @@ public class CreatorNewRecipe extends AppCompatActivity {
         }
     }
     protected void addToDatabase(String recipeName, String recipeDescription, String strTagList){
-        String mRecipename = recipeName.toLowerCase();
-        String mRecipeDescription = recipeDescription.toLowerCase();
-
-        recipe newRecipe = new recipe(recipeID, mAuth.getCurrentUser().getUid(), mRecipename, mRecipeDescription, strTagList, "private", upload);
+        recipe newRecipe = new recipe(recipeID, mAuth.getCurrentUser().getUid(), recipeName, recipeDescription, strTagList, "private", upload);
         //add to database
         recipeDatabase.child(recipeID).setValue(newRecipe);
         gotoStepsLayout();

@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -28,6 +31,7 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
     private List<recipe> mRecipes;
     private ArrayList<String> mKeys = new ArrayList<>();
     private DatabaseReference recipeRef;
+    private DatabaseReference stepsRef;
     private Context mContext;
     private FirebaseAuth mAuth;
 
@@ -35,6 +39,7 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
         mRecipes = recipes;
         mAuth = FirebaseAuth.getInstance();
         recipeRef = FirebaseDatabase.getInstance().getReference().child("recipes");
+        stepsRef = FirebaseDatabase.getInstance().getReference().child("steps");
         Query recipeQuery = recipeRef.orderByChild("userID").equalTo(mAuth.getCurrentUser().getUid());
         recipeQuery.addChildEventListener(new CreatorAdaptor.RecipeChildEventListener());
     }
@@ -65,7 +70,11 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
 
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
+            int index = mKeys.indexOf(dataSnapshot.getKey());
+            mRecipes.remove(index);
+            mKeys.remove(index);
 
+            notifyDataSetChanged();
         }
 
         @Override
@@ -87,12 +96,20 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
         private ImageView mRowImage;
         private CardView mCard;
 
+        private LinearLayout mButtons;
+        private Button mEditButton;
+        private Button mDeleteButton;
+
         public ViewHolder(View itemView) {
             super(itemView);
             mRecipeTitle = (TextView) itemView.findViewById(R.id.titleText);
             mRecipeDescription = (TextView) itemView.findViewById(R.id.descriptionText);
             mRowImage = (ImageView) itemView.findViewById(R.id.rowImage);
             mCard = (CardView) itemView.findViewById(R.id.recipeCard);
+
+            mButtons = (LinearLayout) itemView.findViewById(R.id.cardButtonsLayout);
+            mEditButton = (Button) itemView.findViewById(R.id.editButton);
+            mDeleteButton = (Button) itemView.findViewById(R.id.deleteButton);
         }
     }
 
@@ -111,7 +128,7 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
     public void onBindViewHolder(final CreatorAdaptor.ViewHolder holder, final int position) {
         final recipe recipe = mRecipes.get(position);
         //Make the user clickable
-        final CardView cardView = holder.mCard;
+        CardView cardView = holder.mCard;
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,9 +139,40 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
                 mContext.startActivity(mIntent);
             }
         });
-        final TextView recipetitle = holder.mRecipeTitle;
-        final TextView recipedescription = holder.mRecipeDescription;
-        final ImageView imageview = holder.mRowImage;
+
+        LinearLayout buttonsContainer = holder.mButtons;
+        buttonsContainer.setVisibility(View.VISIBLE);
+
+        Button deleteButton = holder.mDeleteButton;
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //remove the recipe
+                recipeRef.child(recipe.getRecipeID()).removeValue();
+                //remove the steps
+                Query stepsQuery = stepsRef.orderByChild(recipe.getRecipeID());
+                stepsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot stepsSnapshot: dataSnapshot.getChildren()) {
+                            step step = stepsSnapshot.getValue(step.class);
+                            if(step.getRecipeID().equals(recipe.getRecipeID()))
+                                stepsSnapshot.getRef().removeValue();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });
+
+        Button editButton = holder.mEditButton;
+        TextView recipetitle = holder.mRecipeTitle;
+        TextView recipedescription = holder.mRecipeDescription;
+        ImageView imageview = holder.mRowImage;
 
         recipetitle.setText(recipe.getRecipeName());
         recipedescription.setText(recipe.getRecipeDescription());

@@ -34,6 +34,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 public class ProfileActivity extends AppCompatActivity {
 
     //constants
@@ -201,6 +203,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Picasso.get()
                         .load(user.getProfilePicture())
                         .noPlaceholder()
+                        .transform(new CropCircleTransformation())
                         .into(profilePicture);
                 //TODO biography text
             }

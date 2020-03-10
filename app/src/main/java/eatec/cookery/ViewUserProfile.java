@@ -1,5 +1,6 @@
 package eatec.cookery;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 public class ViewUserProfile extends AppCompatActivity {
     //Firebase
     private DatabaseReference usersRef;
@@ -37,6 +40,7 @@ public class ViewUserProfile extends AppCompatActivity {
 
     private TextView followButton;
     private TextView unfollowButton;
+    private TextView recipesButton;
 
     private TextView reportButton;
 
@@ -66,6 +70,8 @@ public class ViewUserProfile extends AppCompatActivity {
         followButton = findViewById(R.id.followUserButton);
         unfollowButton = findViewById(R.id.unfollowUserButton);
 
+        recipesButton = findViewById(R.id.viewRecipesButton);
+
         //init database
         usersRef = FirebaseDatabase.getInstance().getReference("users");
         followingRef = FirebaseDatabase.getInstance().getReference("following");
@@ -84,7 +90,17 @@ public class ViewUserProfile extends AppCompatActivity {
                 reportUser();
             }
         });
-
+        recipesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mIntent = new Intent(ViewUserProfile.this, RecipesActivity.class);
+                String userRecipeSearch = user.getUserName();
+                String at = "@";
+                String concatString = at.concat(userRecipeSearch);
+                mIntent.putExtra("userRecipeSearch", concatString);
+                startActivity(mIntent);
+            }
+        });
     }
     @Override
     protected void onStart() {
@@ -111,6 +127,7 @@ public class ViewUserProfile extends AppCompatActivity {
                 //set Profile Picture
                 Picasso.get()
                         .load(user.getProfilePicture())
+                        .transform(new CropCircleTransformation())
                         .noPlaceholder()
                         .into(ppImage);
             }

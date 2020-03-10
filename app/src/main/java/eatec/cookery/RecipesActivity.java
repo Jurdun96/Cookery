@@ -36,11 +36,13 @@ public class RecipesActivity extends AppCompatActivity {
 
     private DatabaseReference recipeRef;
 
+    private String userRecipeSearch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes);
-
+        userRecipeSearch = getIntent().getStringExtra("userRecipeSearch");
         //innit the filter cards
         veganCard = findViewById(R.id.veganCard);
         noneCard = findViewById(R.id.noneCard);
@@ -85,25 +87,25 @@ public class RecipesActivity extends AppCompatActivity {
                         strTaglistBuilder.append(", " + tagList.get(i));
                     }
                 }
-
-                String searchBarText = searchBar.getText().toString();
-
-                searchBarText = searchBarText.toLowerCase();
-
                 recipeRef = FirebaseDatabase.getInstance().getReference().child("recipes");
 
-                Query recipeQuery = recipeRef.orderByChild("recipeName").limitToFirst(25).startAt(searchBarText).endAt(searchBarText+"uf8ff");
+                Query recipeQuery = recipeRef;
                 String strTagList = String.valueOf(strTaglistBuilder);
 
                 //init list
                 listRecipesList = new ArrayList<>();
-                recipeAdaptor = new RecipeAdaptor(listRecipesList, recipeQuery, strTagList);
+                recipeAdaptor = new RecipeAdaptor(listRecipesList, recipeQuery, strTagList,searchBar);
                 viewRecipeList = findViewById(R.id.recipeRView);
                 viewRecipeList.setHasFixedSize(true);
                 viewRecipeList.setLayoutManager(new LinearLayoutManager(RecipesActivity.this));
                 viewRecipeList.setAdapter(recipeAdaptor);
             }
         });
+
+        if(userRecipeSearch != null) {
+            searchBar.setText(userRecipeSearch);
+            viewRecipeList.setAdapter(recipeAdaptor);
+        }
         //Highlight the menu buttons to indicated current page;
         highlightMenuIcon();
     }

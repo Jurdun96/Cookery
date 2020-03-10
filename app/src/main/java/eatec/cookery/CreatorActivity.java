@@ -25,7 +25,8 @@ public class CreatorActivity extends AppCompatActivity {
 
         //Highlight the home buttons to indicated current page;
         highlightMenuIcon();
-
+        //innit objects
+        createButton = findViewById(R.id.addNewRecipe);
         //Init List
         recipeList = new ArrayList<>();
         recipeAdapter = new CreatorAdaptor(recipeList);
@@ -34,52 +35,7 @@ public class CreatorActivity extends AppCompatActivity {
         viewRecipeList.setAdapter(recipeAdapter);
         viewRecipeList.setLayoutManager(new LinearLayoutManager(this));
 
-        //innit objects
-        createButton = findViewById(R.id.addNewRecipe);
-
-
-
-        //Function to delete a recipe and corresponding steps
-       /* viewRecipeList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                createButton.setBackgroundColor(getResources().getColor(R.color.googleButtonColor));
-                createButton.setText("Delete Recipe");
-                final TextView recipeIDTV = view.findViewById(R.id.recipeIDTextView);
-                final String recipeID = recipeIDTV.getText().toString();
-                createButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //remove the recipe
-                        recipesDatabase.child(recipeID).removeValue();
-                        //remove the steps
-                        Query stepsQuery = stepsDatabase.orderByChild(recipeID);
-                        stepsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot stepsSnapshot: dataSnapshot.getChildren()) {
-                                    step step = stepsSnapshot.getValue(step.class);
-                                    if(step.getRecipeID().equals(recipeID))
-                                        stepsSnapshot.getRef().removeValue();
-                                }
-                            }
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-                        setCreateButton();
-                    }
-                });
-                return true;
-            }
-        });*/
-
-
-        //Default add recipe behaviour
-        Button addRecipeButton = (Button) findViewById(R.id.addNewRecipe);
-        addRecipeButton.setOnClickListener(new View.OnClickListener() {
+        createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(CreatorActivity.this, CreatorNewRecipe.class));
@@ -87,17 +43,6 @@ public class CreatorActivity extends AppCompatActivity {
         });
     }
 
-    public void setCreateButton() {
-        //If the user has used the delete function, this method returns the button back to normal
-        createButton.setBackgroundColor(getResources().getColor(R.color.AccentGenericButtonColor));
-        createButton.setText("Create Recipe");
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(CreatorActivity.this, CreatorNewRecipe.class));
-            }
-        });
-    }
     public void highlightMenuIcon() {
         ImageView socialButton = findViewById(R.id.socialButton);
         socialButton.setImageResource(R.drawable.friends);
@@ -135,14 +80,5 @@ public class CreatorActivity extends AppCompatActivity {
         startActivity(new Intent(CreatorActivity.this, FavouritesActivity.class));
         overridePendingTransition(0,0);
         finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(createButton.getText().equals("Delete Recipe")){
-            setCreateButton();
-        }else {
-            super.onBackPressed();
-        }
     }
 }
