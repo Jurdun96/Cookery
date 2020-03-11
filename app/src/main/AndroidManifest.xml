@@ -4,9 +4,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/cookery_logo"
+        android:icon="@drawable/cookery_icon512x512"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/cookery_logo_round"
+        android:roundIcon="@drawable/cookery_icon512x512"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ViewUserProfile"
@@ -21,7 +21,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

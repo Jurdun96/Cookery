@@ -114,7 +114,11 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
 
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
+            int index = mKeys.indexOf(dataSnapshot.getKey());
+            mRecipes.remove(index);
+            mKeys.remove(index);
 
+            notifyDataSetChanged();
         }
 
         @Override

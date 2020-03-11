@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,26 +26,15 @@ public class RecipesActivity extends AppCompatActivity {
     private List<String> tagList;
     private RecipeAdaptor recipeAdaptor;
 
-    private CardView veganCard, noneCard, fishCard, vegetarianCard;
-
     private TextView vegText,noneText,fishText,veganText;
 
     private EditText searchBar;
-
-    private DatabaseReference recipeRef;
-
-    private String userRecipeSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes);
-        userRecipeSearch = getIntent().getStringExtra("userRecipeSearch");
-        //innit the filter cards
-        veganCard = findViewById(R.id.veganCard);
-        noneCard = findViewById(R.id.noneCard);
-        fishCard = findViewById(R.id.fishCard);
-        vegetarianCard = findViewById(R.id.vegCard);
+        String userRecipeSearch = getIntent().getStringExtra("userRecipeSearch");
 
         vegText = findViewById(R.id.vegText);
         vegText.setTextColor(Color.DKGRAY);
@@ -58,54 +45,25 @@ public class RecipesActivity extends AppCompatActivity {
         veganText = findViewById(R.id.veganText);
         veganText.setTextColor(Color.DKGRAY);
 
-        //init and add null tag as a default
+        listRecipesList = new ArrayList<>();
+        viewRecipeList = findViewById(R.id.recipeRView);
+
         tagList = new ArrayList<>();
         searchBar = findViewById(R.id.SearchBar);
+        Button searchButton = findViewById(R.id.searchBarButton);
 
-        searchBar.addTextChangedListener(new TextWatcher() {
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                final StringBuilder strTaglistBuilder = new StringBuilder();
-                if (tagList.isEmpty()) {
-                    strTaglistBuilder.append("none");
-                }
-
-                for (int i = 0; tagList.size() > i; i++) {
-                    if (i == 0) {
-                        strTaglistBuilder.append(tagList.get(i));
-                    } else {
-                        strTaglistBuilder.append(", " + tagList.get(i));
-                    }
-                }
-                recipeRef = FirebaseDatabase.getInstance().getReference().child("recipes");
-
-                Query recipeQuery = recipeRef;
-                String strTagList = String.valueOf(strTaglistBuilder);
-
-                //init list
-                listRecipesList = new ArrayList<>();
-                recipeAdaptor = new RecipeAdaptor(listRecipesList, recipeQuery, strTagList,searchBar);
-                viewRecipeList = findViewById(R.id.recipeRView);
-                viewRecipeList.setHasFixedSize(true);
-                viewRecipeList.setLayoutManager(new LinearLayoutManager(RecipesActivity.this));
-                viewRecipeList.setAdapter(recipeAdaptor);
+            public void onClick(View view) {
+                Search();
             }
         });
-
         if(userRecipeSearch != null) {
             searchBar.setText(userRecipeSearch);
             viewRecipeList.setAdapter(recipeAdaptor);
+            Search();
         }
+
         //Highlight the menu buttons to indicated current page;
         highlightMenuIcon();
     }
@@ -162,7 +120,31 @@ public class RecipesActivity extends AppCompatActivity {
             noneText.setTextColor(getResources().getColor(R.color.genericButtonColor));
         }
     }
+    public void Search(){
+        final StringBuilder strTaglistBuilder = new StringBuilder();
+        if (tagList.isEmpty()) {
+            strTaglistBuilder.append("none");
+        }
 
+        for (int i = 0; tagList.size() > i; i++) {
+            if (i == 0) {
+                strTaglistBuilder.append(tagList.get(i));
+            } else {
+                strTaglistBuilder.append(", " + tagList.get(i));
+            }
+        }
+        DatabaseReference recipeRef = FirebaseDatabase.getInstance().getReference().child("recipes");
+
+        Query recipeQuery = recipeRef;
+        String strTagList = String.valueOf(strTaglistBuilder);
+
+        listRecipesList = new ArrayList<>();
+        viewRecipeList = findViewById(R.id.recipeRView);
+        recipeAdaptor = new RecipeAdaptor(listRecipesList, recipeQuery, strTagList,searchBar);
+        viewRecipeList.setHasFixedSize(true);
+        viewRecipeList.setLayoutManager(new LinearLayoutManager(RecipesActivity.this));
+        viewRecipeList.setAdapter(recipeAdaptor);
+    }
     public void highlightMenuIcon() {
         ImageView socialButton = findViewById(R.id.socialButton);
         socialButton.setImageResource(R.drawable.friends);

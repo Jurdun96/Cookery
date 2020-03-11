@@ -40,6 +40,7 @@ public class CreatorNewRecipe extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference recipeDatabase;
+    private DatabaseReference postsDatabase;
     private StorageReference mStorageRef;
 
     private List<String> tags;
@@ -67,6 +68,8 @@ public class CreatorNewRecipe extends AppCompatActivity {
         recipeDatabase = FirebaseDatabase.getInstance().getReference("recipes");
         mStorageRef = FirebaseStorage.getInstance().getReference("recipeImages");
 
+        //post to followers
+        postsDatabase = FirebaseDatabase.getInstance().getReference("posts");
         recipeID = recipeDatabase.push().getKey();
 
         uploadRecipeImageButton = findViewById(R.id.uploadRecipeImage);
@@ -258,6 +261,9 @@ public class CreatorNewRecipe extends AppCompatActivity {
         recipe newRecipe = new recipe(recipeID, mAuth.getCurrentUser().getUid(), recipeName, recipeDescription, strTagList, "private", upload);
         //add to database
         recipeDatabase.child(recipeID).setValue(newRecipe);
+
+        Posts post = new Posts(mAuth.getUid(),"I just made a new Recipe!", null);
+        postsDatabase.child(postsDatabase.push().getKey()).setValue(post);
         gotoStepsLayout();
         finish();
     }

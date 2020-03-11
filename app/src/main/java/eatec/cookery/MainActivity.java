@@ -3,9 +3,12 @@ package eatec.cookery;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 
@@ -24,8 +30,15 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
+    private DatabaseReference posts;
     private DatabaseReference Users;
+    private Button postButton;
+    private EditText postContainer;
     private String UID;
+
+    private MainAdaptor mainAdaptor;
+    private RecyclerView listPostsView;
+    private List<Posts> listPosts;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +49,24 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
+        posts = database.getReference("posts");
         if (mAuth.getCurrentUser() != null) {getUserDetails();}
 
+        postButton = findViewById(R.id.postButton);
+        postContainer = findViewById(R.id.postEditText);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postUpdate();
+            }
+        });
+
+        listPosts = new ArrayList<>();
+        listPostsView = findViewById(R.id.postsRView);
+        mainAdaptor = new MainAdaptor(listPosts);
+        listPostsView.setHasFixedSize(true);
+        listPostsView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        listPostsView.setAdapter(mainAdaptor);
 
     }
 
@@ -47,18 +76,12 @@ public class MainActivity extends AppCompatActivity {
         Users.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                TextView username = findViewById(R.id.usernameTextBox);
-                TextView rank = findViewById(R.id.cookeryRankTextBox);
-                ImageView userImage = findViewById(R.id.userImage);
+                ImageView userImage = findViewById(R.id.profileImage);
                 //Get the current users Unique ID. Used to find them in the database.
 
                 UID = mAuth.getCurrentUser().getUid();
                 //Set their details in the User details container.
                 user user = dataSnapshot.child(UID).getValue(user.class);
-
-                username.setText(user.getUserName());
-                rank.setText(user.convertCookeryRank());
                 Picasso.get()
                         .load(user.getProfilePicture())
                         .placeholder(R.drawable.user)
@@ -72,7 +95,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    public void postUpdate() {
+        String postKey = posts.push().getKey();
+        Posts post = new Posts(mAuth.getUid(), postContainer.getText().toString(), null);
+        posts.child(postKey).setValue(post);
+    }
     public void openCreatorActivity(View view) {
         startActivity(new Intent(MainActivity.this, CreatorActivity.class));
         overridePendingTransition(0,0);
@@ -123,27 +150,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
      protected void onResume() {
         super.onResume();
-        TextView username = findViewById(R.id.usernameTextBox);
-        TextView login = findViewById(R.id.loginTextBox);
-        TextView rank = findViewById(R.id.cookeryRankTextBox);
-
-
 
         if (currentUser != null) {
-            username.setVisibility(View.VISIBLE);
-            rank.setVisibility(View.VISIBLE);
-
-            login.setVisibility(View.INVISIBLE);
-
             getUserDetails();
-
             new checkStrikes(MainActivity.this);
         }
         else {
             startActivity(new Intent(MainActivity.this, LoginPreActivity.class));
-            login.setVisibility(View.VISIBLE);
-            username.setVisibility(View.INVISIBLE);
-            rank.setVisibility(View.INVISIBLE);
         }
     }
     @Override
