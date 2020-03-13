@@ -20,19 +20,18 @@ public class giveRep {
     private String mMessage;
     private int mAmount;
 
-    public giveRep(Context context, String message, int amount) {
+    public giveRep(Context context, String message, int amount, String uid) {
         this.mContext = context;
         this.mMessage = message;
         this.mAmount = amount;
+        this.UID = uid;
 
-        Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
-
-        mAuth = FirebaseAuth.getInstance();
-        UID = mAuth.getCurrentUser().getUid();
-
+        if(mMessage!=null) {
+            Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
+        }
         database = FirebaseDatabase.getInstance().getReference("users");
 
-        Query userRef = database.orderByChild("userID").equalTo(mAuth.getCurrentUser().getUid());
+        Query userRef = database.orderByChild("userID").equalTo(uid);
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

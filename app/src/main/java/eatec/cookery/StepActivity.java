@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,6 +22,7 @@ public class StepActivity extends AppCompatActivity {
     private DatabaseReference stepsRef;
     private String recipeID;
     private StepAdapter stepAdapter;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,10 @@ public class StepActivity extends AppCompatActivity {
 
     public void finishCreating(View view) {
         //give xp
-        new giveRep(this, "Recipe added: 1 reputation gained!", 1);
+
+        mAuth = FirebaseAuth.getInstance();
+        String UID = mAuth.getCurrentUser().getUid();
+        new giveRep(this, "Recipe added: 1 reputation gained!", 1, UID);
         finish();
 
     }

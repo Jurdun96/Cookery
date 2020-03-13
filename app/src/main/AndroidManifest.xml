@@ -4,9 +4,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/cookery_icon512x512"
+        android:icon="@drawable/cookery_icon_black_border"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/cookery_icon512x512"
+        android:roundIcon="@drawable/cookery_icon_black_border"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ViewUserProfile"

@@ -22,6 +22,7 @@ public class createAccountActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference database;
     private DatabaseReference followingDatabase;
+    private DatabaseReference likesDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

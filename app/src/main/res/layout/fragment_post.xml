@@ -24,11 +24,10 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/profileImage"
+                android:id="@+id/postImage"
                 android:layout_width="match_parent"
-                android:layout_height="365dp"
-                android:visibility="gone"
-                app:srcCompat="@drawable/book" />
+                android:layout_height="350dp"
+                android:scaleType="fitXY" />
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -98,21 +97,26 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/likePostButton"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="128dp"
                     android:layout_weight="1"
-                    android:text="Like" />
+                    android:drawableLeft="@drawable/ic_thumb_up_black_24dp"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="@color/genericButtonColor" />
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/commentPostButton"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Comment" />
+                    android:drawableLeft="@drawable/ic_comment_black_24dp"
+                    android:text="Comment"
+                    android:textColor="@color/genericButtonColor" />
             </LinearLayout>
         </LinearLayout>
 

@@ -1,30 +1,34 @@
 package eatec.cookery;
 
-import android.net.Uri;
-
 public class Posts {
     private String mUserID;
     private String mContent;
-    private Uri Image;
+    private String mRecipeID;
+    private String mImage;
+    private int mLikes;
 
     public Posts() {
     }
 
-    public Posts(String userID, String content, Uri image) {
+    public Posts(String userID, String content, String image, String recipeID, int likes) {
         this.mUserID = userID;
         this.mContent = content;
-        Image = image;
+        this.mLikes = likes;
+        this.mRecipeID = recipeID;
+        this.mImage = image;
     }
 
     public String getmUserID() {
         return mUserID;
     }
-
+    public int getmLikes() {return mLikes;}
     public String getmContent() {
         return mContent;
     }
-
-    public Uri getImage() {
-        return Image;
+    public String getmRecipeID() {
+        return mRecipeID;
+    }
+    public String getmImage() {
+        return mImage;
     }
 }

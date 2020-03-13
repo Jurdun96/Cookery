@@ -97,8 +97,11 @@ public class MainActivity extends AppCompatActivity {
     }
     public void postUpdate() {
         String postKey = posts.push().getKey();
-        Posts post = new Posts(mAuth.getUid(), postContainer.getText().toString(), null);
+        Posts post = new Posts(mAuth.getUid(), postContainer.getText().toString(), null, null,0);
         posts.child(postKey).setValue(post);
+    }
+    public void likePost(){
+
     }
     public void openCreatorActivity(View view) {
         startActivity(new Intent(MainActivity.this, CreatorActivity.class));

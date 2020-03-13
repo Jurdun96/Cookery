@@ -262,7 +262,7 @@ public class CreatorNewRecipe extends AppCompatActivity {
         //add to database
         recipeDatabase.child(recipeID).setValue(newRecipe);
 
-        Posts post = new Posts(mAuth.getUid(),"I just made a new Recipe!", null);
+        Posts post = new Posts(mAuth.getUid(),"I just made a new "+recipeName+" recipe!", upload, recipeID, 0);
         postsDatabase.child(postsDatabase.push().getKey()).setValue(post);
         gotoStepsLayout();
         finish();

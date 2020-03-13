@@ -42,6 +42,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="Post"
                 android:textColor="@color/genericButtonColor"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -50,9 +51,9 @@
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/profileImage"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="32dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:onClick="openLoginActivity"
@@ -66,12 +67,12 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 app:cardCornerRadius="8dp"
                 app:contentPadding="4dp"
-                app:layout_constraintBottom_toBottomOf="@id/profileImage"
+                app:layout_constraintBottom_toBottomOf="@+id/profileImage"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/profileImage"
+                app:layout_constraintStart_toEndOf="@+id/profileImage"
                 app:layout_constraintTop_toTopOf="@+id/profileImage">
 
                 <EditText
