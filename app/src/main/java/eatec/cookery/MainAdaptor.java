@@ -235,7 +235,14 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
         });
 
         Button commentButton = holder.mCommentButton;
-
+        commentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mIntent = new Intent(mContext, CommentPost.class);
+                mIntent.putExtra("postID", postIDTV.getText().toString());
+                mContext.startActivity(mIntent);
+            }
+        });
         userID.setText(post.getmUserID());
         postIDTV.setText(mKeys.get(position));
         postContent.setText(post.getmContent());

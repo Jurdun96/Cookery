@@ -96,11 +96,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void postUpdate() {
-        String postKey = posts.push().getKey();
-        Posts post = new Posts(mAuth.getUid(), postContainer.getText().toString(), null, null,0);
-        posts.child(postKey).setValue(post);
-    }
-    public void likePost(){
+        if(!postContainer.getText().toString().equals("")) {
+            String postKey = posts.push().getKey();
+            Posts post = new Posts(mAuth.getUid(), postContainer.getText().toString(), null, null,0);
+            posts.child(postKey).setValue(post);
+            postContainer.setText("");
+        }
+        else {
+            Toast.makeText(this, "You cannot post an empty update.", Toast.LENGTH_SHORT).show();
+        }
 
     }
     public void openCreatorActivity(View view) {
