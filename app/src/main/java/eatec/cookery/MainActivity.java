@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         if(!postContainer.getText().toString().equals("")) {
             String postKey = posts.push().getKey();
             Posts post = new Posts(mAuth.getUid(), postContainer.getText().toString(), null, null,0);
-            posts.child(postKey).setValue(post);
+            posts.push().setValue(post);
             postContainer.setText("");
         }
         else {
