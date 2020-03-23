@@ -107,7 +107,10 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
 
         private TextView mContentTextView,
                 mPostIDTV,
-                mUserIDTv;
+                mUserIDTv,
+                mUserUsername,
+                mUserCookeryRank,
+                mDateTime;
         private ImageView mUserImage,
                 mContentImage;
 
@@ -118,8 +121,14 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
             super(itemView);
             mContentTextView = itemView.findViewById(R.id.contentTextView);
             mPostIDTV = itemView.findViewById(R.id.postIDTV);
+
             mUserIDTv = itemView.findViewById(R.id.userIDTV);
+            mUserUsername = itemView.findViewById(R.id.PostUsernameUser);
+
+
             mCard = itemView.findViewById(R.id.postCard);
+
+            mDateTime = itemView.findViewById(R.id.PostDateTime);
 
             mUserImage = itemView.findViewById(R.id.PostImageUser);
             mContentImage = itemView.findViewById(R.id.postImage);
@@ -160,6 +169,9 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
         TextView postContent = holder.mContentTextView;
         final TextView userID = holder.mUserIDTv;
         final TextView postIDTV = holder.mPostIDTV;
+        final TextView username = holder.mUserUsername;
+        final TextView cookeryrank = holder.mUserCookeryRank;
+        final TextView dateTime = holder.mDateTime;
 
         final ImageView userImage = holder.mUserImage;
         userImage.setOnClickListener(new View.OnClickListener() {
@@ -246,6 +258,7 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
         userID.setText(post.getmUserID());
         postIDTV.setText(mKeys.get(position));
         postContent.setText(post.getmContent());
+        dateTime.setText(post.getmDateTime());
         Picasso.get().load(post.getmImage()).into(postImage);
 
         Query query = userRef.child(post.getmUserID());
@@ -254,6 +267,7 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 user user = dataSnapshot.getValue(user.class);
                 Picasso.get().load(user.getProfilePicture()).transform(new CropCircleTransformation()).into(userImage);
+                username.setText(user.getUserName());
             }
 
             @Override

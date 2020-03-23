@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         listPostsView.setHasFixedSize(true);
         listPostsView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         listPostsView.setAdapter(mainAdaptor);
+        listPostsView.setNestedScrollingEnabled(false);
 
     }
 
@@ -97,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public void postUpdate() {
         if(!postContainer.getText().toString().equals("")) {
-            String postKey = posts.push().getKey();
-            Posts post = new Posts(mAuth.getUid(), postContainer.getText().toString(), null, null,0);
+            String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date());
+            Posts post = new Posts(mAuth.getUid(), postContainer.getText().toString(), null, null,0, currentDateTimeString);
             posts.push().setValue(post);
             postContainer.setText("");
         }

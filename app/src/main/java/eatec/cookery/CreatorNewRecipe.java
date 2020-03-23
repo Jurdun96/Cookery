@@ -34,6 +34,7 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CreatorNewRecipe extends AppCompatActivity {
@@ -261,8 +262,8 @@ public class CreatorNewRecipe extends AppCompatActivity {
         recipe newRecipe = new recipe(recipeID, mAuth.getCurrentUser().getUid(), recipeName, recipeDescription, strTagList, "private", upload);
         //add to database
         recipeDatabase.child(recipeID).setValue(newRecipe);
-
-        Posts post = new Posts(mAuth.getUid(),"I just made a new "+recipeName+" recipe!", upload, recipeID, 0);
+        String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date());
+        Posts post = new Posts(mAuth.getUid(),"I just made a new "+recipeName+" recipe!", upload, recipeID, 0, currentDateTimeString);
         postsDatabase.child(postsDatabase.push().getKey()).setValue(post);
         gotoStepsLayout();
         finish();
