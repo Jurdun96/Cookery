@@ -10,11 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,26 +28,60 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.ViewHolder
 
 
     private List<user> mUsers;
+    private String mSearchBar;
     private ArrayList<String> mKeys = new ArrayList<>();
     private DatabaseReference userRef;
+    private DatabaseReference followingRef;
+    private List<String> following = new ArrayList<>();
     private Context mContext;
+    private FirebaseAuth mAuth;
 
-    public SocialAdapter(List<user> users){
+    public SocialAdapter(List<user> users, String searchBar){
         mUsers = users;
-        userRef = FirebaseDatabase.getInstance().getReference().child("users");
+        mSearchBar = searchBar;
+        mAuth = FirebaseAuth.getInstance();
+        followingRef = FirebaseDatabase.getInstance().getReference("following");
+        userRef = FirebaseDatabase.getInstance().getReference("users");
         userRef.addChildEventListener(new SocialAdapter.SocialChildEventListener());
     }
 
     class SocialChildEventListener implements ChildEventListener {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            user user = dataSnapshot.getValue(user.class);
-            mUsers.add(user);
 
-            notifyDataSetChanged();
+            final user user = dataSnapshot.getValue(user.class);
 
-            String key = dataSnapshot.getKey();
-            mKeys.add(key);
+            if(mSearchBar.equals("")) {
+                //get list of users that are being followed
+                followingRef.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot children : dataSnapshot.getChildren()) {
+                            if(children.getKey().equals(user.getUserID())) {
+                                mUsers.add(user);
+                                notifyDataSetChanged();
+                                String key = dataSnapshot.getKey();
+                                mKeys.add(key);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+            else {
+                if(user.getUserName().toLowerCase().contains(mSearchBar.toLowerCase())) {
+                    //Checks if the username is loosely connected to the users search entry, if it is then it will display the users
+                    mUsers.add(user);
+                    notifyDataSetChanged();
+                    String key = dataSnapshot.getKey();
+                    mKeys.add(key);
+                }
+            }
+
         }
 
         @Override

@@ -31,8 +31,8 @@
 
                 <ImageButton
                     android:id="@+id/socialButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:background="@android:color/transparent"
                     android:onClick="openSocialActivity"
                     android:scaleType="fitCenter"
@@ -45,8 +45,8 @@
 
                 <ImageButton
                     android:id="@+id/searchButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:background="@android:color/transparent"
                     android:cropToPadding="true"
                     android:onClick="openRecipesActivity"
@@ -60,8 +60,8 @@
 
                 <ImageButton
                     android:id="@+id/homeButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
                     android:background="@android:color/transparent"
@@ -76,8 +76,8 @@
 
                 <ImageButton
                     android:id="@+id/favouriteButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:background="@android:color/transparent"
                     android:onClick="openFavouritesActivity"
                     android:scaleType="fitCenter"
@@ -90,8 +90,8 @@
 
                 <ImageButton
                     android:id="@+id/myRecipesButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:background="@android:color/transparent"
                     android:onClick="openCreatorActivity"
                     android:scaleType="fitCenter"

@@ -126,7 +126,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                     @Override
                     public void onClick(View view) {
                         Intent mIntent = new Intent(mContext, ViewUserProfile.class);
-                        mIntent.putExtra("userID", user.getUserID());
+                        mIntent.putExtra("userID", user.getUserName());
                         mContext.startActivity(mIntent);
                     }
                 });

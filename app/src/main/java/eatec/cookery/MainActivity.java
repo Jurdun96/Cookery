@@ -159,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
      protected void onResume() {
         super.onResume();
-
         if (currentUser != null) {
             getUserDetails();
             new checkStrikes(MainActivity.this);

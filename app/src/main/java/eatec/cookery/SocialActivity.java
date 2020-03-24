@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -15,8 +17,10 @@ public class SocialActivity extends AppCompatActivity {
 
     private RecyclerView viewUserList;
     private List<user> listUserList;
-
     private SocialAdapter socialAdapter;
+
+    private EditText searchBar;
+    private Button searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +30,21 @@ public class SocialActivity extends AppCompatActivity {
         //Highlight the home buttons to indicated current page;
         highlightMenuIcon();
 
+        searchBar = findViewById(R.id.socialSearchBar);
+        searchButton = findViewById(R.id.socialSearchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String searchText = searchBar.getText().toString();
+
+                listUserList = new ArrayList<>();
+                socialAdapter = new SocialAdapter(listUserList, searchText);
+                viewUserList.setAdapter(socialAdapter);
+            }
+        });
+
         listUserList = new ArrayList<>();
-        socialAdapter = new SocialAdapter(listUserList);
+        socialAdapter = new SocialAdapter(listUserList, "");
         viewUserList = findViewById(R.id.userRView);
         viewUserList.setHasFixedSize(true);
         viewUserList.setAdapter(socialAdapter);

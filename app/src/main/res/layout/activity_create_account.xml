@@ -27,6 +27,7 @@
             android:text="Create Account"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/AccentGenericButtonColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -38,6 +39,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:text="Email Address"
+            android:textColor="@color/AccentGenericButtonColor"
             app:layout_constraintBottom_toTopOf="@+id/emailTextBox"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -49,6 +51,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="64dp"
+            android:backgroundTint="@color/genericButtonColor"
             android:ems="10"
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,6 +66,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:text="Username"
+            android:textColor="@color/AccentGenericButtonColor"
             app:layout_constraintBottom_toTopOf="@+id/userNameTextBox"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -74,6 +78,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
+            android:backgroundTint="@color/genericButtonColor"
             android:ems="10"
             android:inputType="text|textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,6 +93,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:text="Password"
+            android:textColor="@color/AccentGenericButtonColor"
             app:layout_constraintBottom_toTopOf="@+id/passwordTextBox"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -99,6 +105,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
+            android:backgroundTint="@color/genericButtonColor"
             android:ems="10"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
@@ -112,6 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="Update me with news"
+            android:textColor="@color/AccentGenericButtonColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/passwordTextBox" />
@@ -121,6 +129,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="I have read the terms of service and agree"
+            android:textColor="@color/AccentGenericButtonColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/checkBox2" />
