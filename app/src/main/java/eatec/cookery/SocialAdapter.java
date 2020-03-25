@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -128,6 +130,7 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.ViewHolder
             userIDTextView = (TextView) itemView.findViewById(R.id.userIDTV);
             userImage = (ImageView) itemView.findViewById(R.id.rowImage);
             outerContainer = (ConstraintLayout) itemView.findViewById(R.id.OuterContainer);
+
         }
     }
 
@@ -145,6 +148,9 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final SocialAdapter.ViewHolder holder, final int position) {
         final user user = mUsers.get(position);
+
+
+
         //Make the user clickable
         final ConstraintLayout mOuterContainer = holder.outerContainer;
         mOuterContainer.setOnClickListener(new View.OnClickListener() {

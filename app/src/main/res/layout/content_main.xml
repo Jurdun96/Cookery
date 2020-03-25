@@ -83,8 +83,9 @@
                         android:background="@android:color/white"
                         android:ems="10"
                         android:gravity="start|top"
-                        android:hint="Post an update..."
+                        android:hint="  Post an update..."
                         android:inputType="textMultiLine"
+                        android:textColorHint="@color/genericButtonColor"
                         android:textSize="14sp" />
                 </android.support.v7.widget.CardView>
 

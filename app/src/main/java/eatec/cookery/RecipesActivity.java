@@ -27,7 +27,6 @@ public class RecipesActivity extends AppCompatActivity {
     private RecipeAdaptor recipeAdaptor;
 
     private TextView vegText,noneText,fishText,veganText;
-
     private EditText searchBar;
 
     @Override
@@ -47,7 +46,6 @@ public class RecipesActivity extends AppCompatActivity {
 
         listRecipesList = new ArrayList<>();
         viewRecipeList = findViewById(R.id.recipeRView);
-
         tagList = new ArrayList<>();
         searchBar = findViewById(R.id.SearchBar);
         Button searchButton = findViewById(R.id.searchBarButton);
@@ -63,6 +61,15 @@ public class RecipesActivity extends AppCompatActivity {
             viewRecipeList.setAdapter(recipeAdaptor);
             Search();
         }
+
+        Button feedbackButton = findViewById(R.id.feedbackButton);
+        feedbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(RecipesActivity.this, FeedbackActivity.class));
+                overridePendingTransition(0,0);
+            }
+        });
 
         //Highlight the menu buttons to indicated current page;
         highlightMenuIcon();

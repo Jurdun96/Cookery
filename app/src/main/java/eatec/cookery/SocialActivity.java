@@ -50,6 +50,14 @@ public class SocialActivity extends AppCompatActivity {
         viewUserList.setAdapter(socialAdapter);
         viewUserList.setLayoutManager(new LinearLayoutManager(this));
 
+        Button feedbackButton = findViewById(R.id.feedbackButton);
+        feedbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SocialActivity.this, FeedbackActivity.class));
+                overridePendingTransition(0,0);
+            }
+        });
     }
 
     public void highlightMenuIcon() {

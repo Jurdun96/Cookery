@@ -41,6 +41,15 @@ public class CreatorActivity extends AppCompatActivity {
                 startActivity(new Intent(CreatorActivity.this, CreatorNewRecipe.class));
             }
         });
+
+        Button feedbackButton = findViewById(R.id.feedbackButton);
+        feedbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CreatorActivity.this, FeedbackActivity.class));
+                overridePendingTransition(0,0);
+            }
+        });
     }
 
     public void highlightMenuIcon() {

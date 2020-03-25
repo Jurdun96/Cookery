@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -140,12 +142,20 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
         private ImageView mRowImage;
         private CardView mCard;
 
+        private LinearLayout buttonsLayout;
+        private Button reportButton, favouriteButton;
+
+
         public ViewHolder(View itemView) {
             super(itemView);
             mRecipeTitle = (TextView) itemView.findViewById(R.id.titleText);
             mRecipeDescription = (TextView) itemView.findViewById(R.id.descriptionText);
             mRowImage = (ImageView) itemView.findViewById(R.id.rowImage);
             mCard = (CardView) itemView.findViewById(R.id.recipeCard);
+
+            buttonsLayout = (LinearLayout) itemView.findViewById(R.id.recipeViewButtonsLayout);
+            reportButton = (Button) itemView.findViewById(R.id.rowReportButton);
+            favouriteButton = (Button) itemView.findViewById(R.id.rowFavouriteButton);
         }
     }
 
@@ -163,6 +173,10 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
     @Override
     public void onBindViewHolder(final RecipeAdaptor.ViewHolder holder, final int position) {
         final recipe recipe = mRecipes.get(position);
+
+        LinearLayout buttons = holder.buttonsLayout;
+        buttons.setVisibility(View.VISIBLE);
+
         //Make the user clickable
         final CardView cardView = holder.mCard;
         cardView.setOnClickListener(new View.OnClickListener() {

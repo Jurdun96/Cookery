@@ -2,10 +2,9 @@ package eatec.cookery;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 public class FavouritesActivity extends AppCompatActivity {
@@ -17,6 +16,15 @@ public class FavouritesActivity extends AppCompatActivity {
 
         //Highlight the home buttons to indicated current page;
         highlightMenuIcon();
+
+        Button feedbackButton = findViewById(R.id.feedbackButton);
+        feedbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(FavouritesActivity.this, FeedbackActivity.class));
+                overridePendingTransition(0,0);
+            }
+        });
     }
 
     public void highlightMenuIcon() {

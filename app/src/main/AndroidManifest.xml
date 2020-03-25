@@ -9,7 +9,8 @@
         android:roundIcon="@drawable/cookery_icon_black_border"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CommentPost"></activity>
+        <activity android:name=".FeedbackActivity"></activity>
+        <activity android:name=".CommentPost" />
         <activity
             android:name=".ViewUserProfile"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -78,10 +79,10 @@
             android:label="@string/title_activity_step"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

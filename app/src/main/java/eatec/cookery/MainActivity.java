@@ -70,6 +70,15 @@ public class MainActivity extends AppCompatActivity {
         listPostsView.setAdapter(mainAdaptor);
         listPostsView.setNestedScrollingEnabled(false);
 
+        Button feedbackButton = findViewById(R.id.feedbackButton);
+        feedbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, FeedbackActivity.class));
+                overridePendingTransition(0,0);
+            }
+        });
+
     }
 
     public void getUserDetails() {
