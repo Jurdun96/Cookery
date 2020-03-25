@@ -3,12 +3,19 @@ package eatec.cookery;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class FavouritesActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
 
+public class FavouritesActivity extends AppCompatActivity {
+    private List<recipe> listRecipesList;
+    private RecyclerView viewRecipeList;
+    private FavouritesAdapter favouritesAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +32,13 @@ public class FavouritesActivity extends AppCompatActivity {
                 overridePendingTransition(0,0);
             }
         });
+
+        listRecipesList = new ArrayList<>();
+        viewRecipeList = findViewById(R.id.favouritesRView);
+        favouritesAdapter = new FavouritesAdapter(listRecipesList);
+        viewRecipeList.setHasFixedSize(true);
+        viewRecipeList.setLayoutManager(new LinearLayoutManager(FavouritesActivity.this));
+        viewRecipeList.setAdapter(favouritesAdapter);
     }
 
     public void highlightMenuIcon() {
@@ -65,6 +79,4 @@ public class FavouritesActivity extends AppCompatActivity {
     }
     public void openFavouritesActivity(View view) {
     }
-
-
 }
