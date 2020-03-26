@@ -62,7 +62,6 @@ public class StepActivity extends AppCompatActivity {
 
     public void finishCreating(View view) {
         //give xp
-
         mAuth = FirebaseAuth.getInstance();
         String UID = mAuth.getCurrentUser().getUid();
         new giveRep(this, "Recipe added: 1 reputation gained!", 1, UID);

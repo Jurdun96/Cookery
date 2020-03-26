@@ -37,20 +37,30 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
     private String mTagList;
     private Query mQuery;
     private EditText mSearchBar;
+    private List<String> favouritesList;
 
     private DatabaseReference userRef;
     private DatabaseReference favRef;
-
-    private user mUser;
 
     public RecipeAdaptor(List<recipe> recipes, Query query, String strTagList, EditText searchBar){
         mRecipes = recipes;
         mQuery = query;
         mSearchBar = searchBar;
         mTagList = strTagList;
-        mUser = new user();
+        favouritesList = new ArrayList<>();
+
         userRef = FirebaseDatabase.getInstance().getReference("users");
-        favRef = FirebaseDatabase.getInstance().getReference("favourites");
+        favRef = FirebaseDatabase.getInstance().getReference("favourites").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        favRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot fRecipes : dataSnapshot.getChildren()) {
+                    favouritesList.add(fRecipes.getKey());
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
         mQuery.addChildEventListener(new RecipeAdaptor.RecipeChildEventListener());
     }
 
@@ -58,6 +68,7 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             final recipe recipe = dataSnapshot.getValue(recipe.class);
+
             //User search??
             if(mSearchBar.getText().toString().contains("@")) {
                 Query query = userRef.orderByKey().equalTo(recipe.getUserID());
@@ -87,8 +98,6 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
 
                     }
                 });
-
-
             }
             //Normal Search??
             else {
@@ -140,7 +149,7 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
+        //declare objects
         private TextView mRecipeTitle;
         private TextView mRecipeDescription;
         private ImageView mRowImage;
@@ -152,16 +161,17 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
 
         public ViewHolder(View itemView) {
             super(itemView);
+
+            //Init all objects
             mRecipeTitle = (TextView) itemView.findViewById(R.id.titleText);
             mRecipeDescription = (TextView) itemView.findViewById(R.id.descriptionText);
             mRowImage = (ImageView) itemView.findViewById(R.id.rowImage);
             mCard = (CardView) itemView.findViewById(R.id.recipeCard);
-
+                    //buttons
             buttonsLayout = (LinearLayout) itemView.findViewById(R.id.recipeViewButtonsLayout);
             reportButton = (Button) itemView.findViewById(R.id.rowReportButton);
             favouriteButton = (Button) itemView.findViewById(R.id.rowFavouriteButton);
             unfavouriteButton = (Button) itemView.findViewById(R.id.rowUnfavouriteButton);
-
         }
     }
 
@@ -180,15 +190,24 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
     public void onBindViewHolder(final RecipeAdaptor.ViewHolder holder, final int position) {
         final recipe recipe = mRecipes.get(position);
 
+        //Make the appropriate action buttons visible
         LinearLayout buttons = holder.buttonsLayout;
         buttons.setVisibility(View.VISIBLE);
+
         //Favourite a recipe so that it appears in the users favourite tab
         final Button favButton = holder.favouriteButton;
         final Button unFavButton = holder.unfavouriteButton;
+
+        //check if this recipe is already a favourite of this user
+        if(favouritesList.contains(recipe.getRecipeID())) {
+            unFavButton.setVisibility(View.VISIBLE);
+            favButton.setVisibility(View.GONE);
+        }
+
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                favRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(recipe.getRecipeID()).setValue(recipe.getRecipeName());
+                favRef.child(recipe.getRecipeID()).setValue(recipe.getRecipeName());
 
                 favButton.setVisibility(View.GONE);
                 unFavButton.setVisibility(View.VISIBLE);
@@ -198,14 +217,14 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
         unFavButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                favRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(recipe.getRecipeID()).removeValue();
+                favRef.child(recipe.getRecipeID()).removeValue();
 
                 favButton.setVisibility(View.VISIBLE);
                 unFavButton.setVisibility(View.GONE);
             }
         });
 
-        //Make the user clickable
+        //Make the recipe card clickable, takes the user to the steps
         final CardView cardView = holder.mCard;
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,6 +240,7 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
         final TextView recipedescription = holder.mRecipeDescription;
         final ImageView imageview = holder.mRowImage;
 
+        //set the current recipes data in this recipe card.
         recipetitle.setText(recipe.getRecipeName());
         recipedescription.setText(recipe.getRecipeDescription());
         Picasso.get().load(recipe.getRecipeImage()).into(imageview);

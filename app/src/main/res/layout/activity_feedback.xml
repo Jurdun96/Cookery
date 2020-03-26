@@ -43,7 +43,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="32dp"
-                android:text="Hello,\n Thank you for using cookery and for taking the time to fill out this form. \n \n In this form, please give your honest impressions of the app. Be as blunt, and honest as possible; I'm not interested in &quot;The app looks good&quot;. The whole purpose of this form is to provide feedback with which I can improve on. For this reason, the feedback is completely anonymous. \n \n If you experienced the app closing suddenly, please state what you were doing at the time.\n\n Thank you for your time and honesty, it is appreciated."
+                android:text="Hello,\n Thank you for using cookery and for taking the time to fill out this form. \n \n In this form, please give your honest impressions of the app. Be as blunt, and honest as possible; I'm not interested in &quot;The app looks good&quot;. The whole purpose of this form is to provide feedback with which I can improve on. For this reason, the feedback is completely anonymous. \n \n If you experienced the app closing suddenly, please state what you were doing at the time.\n\n Thank you for your time and honesty, it is appreciated. \n \n Disclaimer: The data you submit here will be for testing purposes ONLY."
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

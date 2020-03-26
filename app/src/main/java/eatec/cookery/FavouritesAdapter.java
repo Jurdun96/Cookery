@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -109,7 +108,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
         private CardView mCard;
 
         private LinearLayout buttonsLayout;
-        private Button reportButton, favouriteButton;
+        private Button reportButton, favouriteButton, unfavouriteButton;
 
 
         public ViewHolder(View itemView) {
@@ -122,6 +121,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
             buttonsLayout = (LinearLayout) itemView.findViewById(R.id.recipeViewButtonsLayout);
             reportButton = (Button) itemView.findViewById(R.id.rowReportButton);
             favouriteButton = (Button) itemView.findViewById(R.id.rowFavouriteButton);
+            unfavouriteButton = (Button) itemView.findViewById(R.id.rowUnfavouriteButton);
         }
     }
 
@@ -143,12 +143,29 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
         LinearLayout buttons = holder.buttonsLayout;
         buttons.setVisibility(View.VISIBLE);
         //Favourite a recipe so that it appears in the users favourite tab
-        Button favButton = holder.favouriteButton;
+        final Button favButton = holder.favouriteButton;
+        final Button unFavButton = holder.unfavouriteButton;
+
+        unFavButton.setVisibility(View.VISIBLE);
+        favButton.setVisibility(View.GONE);
+
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Favourited", Toast.LENGTH_SHORT).show();
-                favRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(recipe.getRecipeID()).setValue(recipe.getRecipeName());
+                favRef.child(recipe.getRecipeID()).setValue(recipe.getRecipeName());
+
+                favButton.setVisibility(View.GONE);
+                unFavButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        unFavButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                favRef.child(recipe.getRecipeID()).removeValue();
+
+                favButton.setVisibility(View.VISIBLE);
+                unFavButton.setVisibility(View.GONE);
             }
         });
 

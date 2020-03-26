@@ -25,8 +25,12 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -46,20 +50,33 @@ public class CreatorNewRecipe extends AppCompatActivity {
 
     private List<String> tags;
     private String recipeID;
-    private String upload;
-    //constants
+
+    //Editing a recipe
+    private String eRecipeID;
+    private recipe eRecipe;
+
+    //Imge upload
     private static final int PICK_IMAGE_REQUEST = 1;
+    private String upload;
     private Uri mImageUri;
     private ImageView uploadRecipeImageButton;
     private ProgressBar mProgressSpinner;
 
+    //edit Texts
+    private EditText rName, rDescription;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creator_new_recipe);
 
+        eRecipeID = getIntent().getStringExtra("recipeID");
+
         mProgressSpinner = findViewById(R.id.progressSpinner);
         mProgressSpinner.setVisibility(View.GONE);
+
+        //get by text views
+        rName = findViewById(R.id.newRecipeName);
+        rDescription = findViewById(R.id.newRecipeDescription);
 
         tags = new ArrayList<>();
         tags.clear();
@@ -91,6 +108,42 @@ public class CreatorNewRecipe extends AppCompatActivity {
             }
         });
 
+        //if editing get details
+        eRecipe = new recipe();
+        if(eRecipeID != null) {
+            Query editing = recipeDatabase.child(eRecipeID);
+            editing.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    eRecipe = dataSnapshot.getValue(recipe.class);
+                    rName.setText(eRecipe.getRecipeName());
+                    rDescription.setText(eRecipe.getRecipeDescription());
+                    Picasso.get().load(eRecipe.getRecipeImage()).into(uploadRecipeImageButton);
+                    upload = eRecipe.getRecipeImage();
+                    //set the check boxes
+                    if(eRecipe.getTags().contains("veg")) {
+                        CheckBox vegCheck = findViewById(R.id.vegCheck);
+                        vegCheck.setChecked(true);
+                        tags.add("veg");
+                    }
+                    if (eRecipe.getTags().contains("vegan")) {
+                        CheckBox veganCheck = findViewById(R.id.veganCheck);
+                        veganCheck.setChecked(true);
+                        tags.add("vegan");
+                    }
+                    if (eRecipe.getTags().contains("fish")) {
+                        CheckBox fishCheck = findViewById(R.id.fishCheck);
+                        fishCheck.setChecked(true);
+                        tags.add("fish");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
     private void openFileChooser() {
         //Open file explorer for user to upload an image of themselves
@@ -164,12 +217,9 @@ public class CreatorNewRecipe extends AppCompatActivity {
         }
     }
     public void setToDatabase(View view) {
-        //get by text views
-        EditText editRecipeName = findViewById(R.id.newRecipeName);
-        EditText editRecipeDescription = findViewById(R.id.newRecipeDescription);
         //pass text views to string
-        String recipeName = editRecipeName.getText().toString();
-        String recipeDescription = editRecipeDescription.getText().toString();
+        String recipeName = rName.getText().toString();
+        String recipeDescription = rDescription.getText().toString();
         Spinner privacySpinner = findViewById(R.id.privacySpinner);
         //TODO privacy spinner
         //TODO upload image
@@ -192,6 +242,7 @@ public class CreatorNewRecipe extends AppCompatActivity {
 
         Boolean recipeNameOkay = false;
         Boolean recipeDescriptionOkay = false;
+
         TextView recipeNameText = findViewById(R.id.recipenameTV);
         if(recipeName.length() < 12) {
             Toast.makeText(this, "Oops... the recipe's name is too short!", Toast.LENGTH_SHORT).show();
@@ -259,18 +310,28 @@ public class CreatorNewRecipe extends AppCompatActivity {
         }
     }
     protected void addToDatabase(String recipeName, String recipeDescription, String strTagList){
-        recipe newRecipe = new recipe(recipeID, mAuth.getCurrentUser().getUid(), recipeName, recipeDescription, strTagList, "private", upload);
+        recipe newRecipe;
         //add to database
-        recipeDatabase.child(recipeID).setValue(newRecipe);
-        String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date());
-        Posts post = new Posts(mAuth.getUid(),"I just made a new "+recipeName+" recipe!", upload, recipeID, 0, currentDateTimeString);
-        postsDatabase.child(postsDatabase.push().getKey()).setValue(post);
+        if(eRecipeID != null) {
+            newRecipe = new recipe(eRecipeID, mAuth.getCurrentUser().getUid(), recipeName, recipeDescription, strTagList, "private", upload);
+            recipeDatabase.child(eRecipeID).setValue(newRecipe);
+        } else {
+            newRecipe = new recipe(recipeID, mAuth.getCurrentUser().getUid(), recipeName, recipeDescription, strTagList, "private", upload);
+            recipeDatabase.child(recipeID).setValue(newRecipe);
+            String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date());
+            Posts post = new Posts(mAuth.getUid(),recipeDescription, upload, recipeID, 0, currentDateTimeString);
+            postsDatabase.child(postsDatabase.push().getKey()).setValue(post);
+        }
         gotoStepsLayout();
         finish();
     }
     public void gotoStepsLayout() {
         Intent mIntent = new Intent(CreatorNewRecipe.this, StepActivity.class);
-        mIntent.putExtra("recipeID", recipeID);
+        if(eRecipeID != null) {
+            mIntent.putExtra("recipeID", eRecipeID);
+        } else {
+            mIntent.putExtra("recipeID", recipeID);
+        }
         startActivity(mIntent);
     }
 

@@ -170,6 +170,15 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
         });
 
         Button editButton = holder.mEditButton;
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String recipeID = recipe.getRecipeID();
+                Intent mIntent = new Intent(mContext, CreatorNewRecipe.class);
+                mIntent.putExtra("recipeID", recipeID);
+                mContext.startActivity(mIntent);
+            }
+        });
         TextView recipetitle = holder.mRecipeTitle;
         TextView recipedescription = holder.mRecipeDescription;
         ImageView imageview = holder.mRowImage;
