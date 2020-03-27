@@ -83,7 +83,7 @@ public class createAccountActivity extends AppCompatActivity {
                         //GET Unique ID.
                         String userID = mAuth.getCurrentUser().getUid();
                         //create and link account in database to authentication details.
-                        addDetailsToDatabase(userID, email, password, username, cookeryRank);
+                        addDetailsToDatabase(userID, email, "", username, cookeryRank);
                         finish();
                     } else {
                         // If sign in fails, display a message to the user.

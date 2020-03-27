@@ -9,8 +9,12 @@
         android:roundIcon="@drawable/cookery_icon_black_border"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FeedbackActivity"></activity>
-        <activity android:name=".CommentPost" />
+        <activity
+            android:name=".FeedbackActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".CommentPost"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ViewUserProfile"
             android:theme="@style/AppTheme.NoActionBar" />
