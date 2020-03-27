@@ -7,9 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -88,14 +86,31 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.ViewHolder
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            user user = dataSnapshot.getValue(user.class);
-            String key = dataSnapshot.getKey();
+            final user user = dataSnapshot.getValue(user.class);
+            if(mSearchBar.equals("")) {
+                //get list of users that are being followed
+                followingRef.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot children : dataSnapshot.getChildren()) {
+                            if(children.getKey().equals(user.getUserID())) {
+                                String key = dataSnapshot.getKey();
 
-            int index = mKeys.indexOf(key);
+                                int index = mKeys.indexOf(key);
 
-            mUsers.set(index, user);
+                                mUsers.set(index, user);
 
-            notifyDataSetChanged();
+                                notifyDataSetChanged();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
         }
 
         @Override

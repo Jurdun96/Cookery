@@ -120,13 +120,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final user user = dataSnapshot.getValue(user.class);
+                final String userID = user.getUserID();
                 Picasso.get().load(user.getProfilePicture()).transform(new CropCircleTransformation()).into(imageview);
                 username.setText(user.getUserName());
                 imageview.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent mIntent = new Intent(mContext, ViewUserProfile.class);
-                        mIntent.putExtra("userID", user.getUserName());
+                        mIntent.putExtra("userID", userID);
                         mContext.startActivity(mIntent);
                     }
                 });

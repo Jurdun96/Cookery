@@ -27,6 +27,9 @@ public class createAccountActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference database;
     private DatabaseReference followingDatabase;
+    private DatabaseReference likesDatabase;
+    private DatabaseReference favouritesDatabase;
+
     private List<String> usernames = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,8 @@ public class createAccountActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance().getReference("users");
         followingDatabase = FirebaseDatabase.getInstance().getReference("following");
+        likesDatabase = FirebaseDatabase.getInstance().getReference("likes");
+        favouritesDatabase = FirebaseDatabase.getInstance().getReference("favourites");
 
         //get usernames to check if they are present or not
         database.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -106,6 +111,8 @@ public class createAccountActivity extends AppCompatActivity {
         user newUser = new user(userID, email, username, profilePicture, "", following, cookeryRank, 0);
         //add that user object to the database
         database.child(userID).setValue(newUser);
-        followingDatabase.child(userID).child("default").setValue("default");
+        followingDatabase.child(userID).child("Maao6NbuS2fzbhTMgpVLJkU02Df1").setValue("Cookery");
+        favouritesDatabase.child(userID).child("Default").setValue("Default");
+
     }
 }
