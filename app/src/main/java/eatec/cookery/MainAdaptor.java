@@ -196,7 +196,7 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
         final Button likeButton = holder.mLikeButton;
 
         Query query0 = likesRef.child(mAuth.getCurrentUser().getUid());
-        query0.addValueEventListener(new ValueEventListener() {
+        query0.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Clear the list every time data is changed
@@ -213,21 +213,23 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
             }
         });
 
+        //handle the liking and unliking of a post
         likeButton.setText(postLikes);
+        int currentLikes = post.getmLikes();
+        final int upvote = currentLikes + 1;
+        final int downvote = currentLikes;
+
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for(int i = 0; likesList.size() > i; i++){
-                    Log.i("Likes List pos" + i, likesList.get(i));
-                }
-                int currentLikes = post.getmLikes();
+
                 if(likesList.contains(postIDTV.getText().toString())) {
                     likesList.remove(postIDTV.getText().toString());
                     likesRef.child(mAuth.getCurrentUser().getUid()).child(postIDTV.getText().toString()).removeValue();
                     Log.i("LIKES","+");
-                    postRef.child(postIDTV.getText().toString()).child("mLikes").setValue(post.getmLikes() - 1);
+                    postRef.child(postIDTV.getText().toString()).child("mLikes").setValue(downvote);
 
-                    String strnewLikes = String.valueOf(currentLikes - 1);
+                    String strnewLikes = String.valueOf(downvote);
                     likeButton.setText(strnewLikes);
 
                     new giveRep(mContext,null, -1, userID.getText().toString());
@@ -235,11 +237,11 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
                 }
                 else {
                     likesList.add(postIDTV.getText().toString());
-                    postRef.child(postIDTV.getText().toString()).child("mLikes").setValue(post.getmLikes() + 1);
+                    postRef.child(postIDTV.getText().toString()).child("mLikes").setValue(upvote);
                     Log.i(mAuth.getCurrentUser().getUid(),"");
                     likesRef.child(mAuth.getCurrentUser().getUid()).child(postIDTV.getText().toString()).setValue("");
 
-                    String strnewLikes = String.valueOf(currentLikes + 1);
+                    String strnewLikes = String.valueOf(upvote);
                     likeButton.setText(strnewLikes);
 
                     new giveRep(mContext, null, 1, userID.getText().toString());
