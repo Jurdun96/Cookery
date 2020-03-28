@@ -62,11 +62,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //declare layout manager and insure that the newest items are at the top
+        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+
         listPosts = new ArrayList<>();
         listPostsView = findViewById(R.id.postsRView);
         mainAdaptor = new MainAdaptor(listPosts);
         listPostsView.setHasFixedSize(true);
-        listPostsView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        listPostsView.setLayoutManager(layoutManager);
+
         listPostsView.setAdapter(mainAdaptor);
         listPostsView.setNestedScrollingEnabled(false);
 
@@ -78,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(0,0);
             }
         });
-
     }
 
     public void getUserDetails() {

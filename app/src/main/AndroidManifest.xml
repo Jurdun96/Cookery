@@ -14,10 +14,11 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".CommentPost"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ViewUserProfile"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".CardActivity"
             android:theme="@style/AppTheme.NoActionBar" />

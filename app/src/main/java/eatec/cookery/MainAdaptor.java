@@ -23,15 +23,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
 
-    private List<Posts> mPosts;
-    private ArrayList<String> mKeys = new ArrayList<>();
+    public List<Posts> mPosts;
+    public ArrayList<String> mKeys = new ArrayList<>();
 
     private Context mContext;
     private DatabaseReference likesRef;
@@ -41,7 +40,6 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
     private List<String> likesList;
     private FirebaseAuth mAuth;
 
-
     public MainAdaptor(List<Posts> posts){
         mPosts = posts;
         mAuth = FirebaseAuth.getInstance();
@@ -49,35 +47,33 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
         userRef = FirebaseDatabase.getInstance().getReference("users");
         postRef =  FirebaseDatabase.getInstance().getReference("posts");
         likesList = new ArrayList<>();
-        postRef.addChildEventListener(new MainAdaptor.MainChildEventListener());
 
+        Query  query = postRef.orderByChild("mDateTime").limitToFirst(25);
+        query.addChildEventListener(new MainAdaptor.MainChildEventListener());
     }
 
     class MainChildEventListener implements ChildEventListener {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             Posts post = dataSnapshot.getValue(Posts.class);
-            mPosts.add(post);
-
             String key = dataSnapshot.getKey();
-            mKeys.add(key);
 
-            Collections.reverse(mPosts);
-            Collections.reverse(mKeys);
+            mPosts.add(post);
+            mKeys.add(key);
 
             notifyDataSetChanged();
         }
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            Posts post = dataSnapshot.getValue(Posts.class);
-            String key = dataSnapshot.getKey();
-
-            int index = mKeys.indexOf(key);
-
-            mPosts.set(index, post);
-
-            notifyDataSetChanged();
+//            Posts post = dataSnapshot.getValue(Posts.class);
+//            String key = dataSnapshot.getKey();
+//
+//            int index = mKeys.indexOf(key);
+//
+//            mPosts.set(index, post);
+//
+//            notifyDataSetChanged();
         }
 
         @Override
@@ -109,7 +105,6 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
                 mPostIDTV,
                 mUserIDTv,
                 mUserUsername,
-                mUserCookeryRank,
                 mDateTime;
         private ImageView mUserImage,
                 mContentImage;
@@ -119,6 +114,7 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
 
         public ViewHolder(View itemView) {
             super(itemView);
+
             mContentTextView = itemView.findViewById(R.id.contentTextView);
             mPostIDTV = itemView.findViewById(R.id.postIDTV);
 
@@ -170,7 +166,6 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
         final TextView userID = holder.mUserIDTv;
         final TextView postIDTV = holder.mPostIDTV;
         final TextView username = holder.mUserUsername;
-        final TextView cookeryrank = holder.mUserCookeryRank;
         final TextView dateTime = holder.mDateTime;
 
         final ImageView userImage = holder.mUserImage;
@@ -230,16 +225,22 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
                     likesList.remove(postIDTV.getText().toString());
                     likesRef.child(mAuth.getCurrentUser().getUid()).child(postIDTV.getText().toString()).removeValue();
                     Log.i("LIKES","+");
-                    postRef.child(postIDTV.getText().toString()).child("mLikes").setValue(currentLikes - 1);
+                    postRef.child(postIDTV.getText().toString()).child("mLikes").setValue(post.getmLikes() - 1);
+
+                    String strnewLikes = String.valueOf(currentLikes - 1);
+                    likeButton.setText(strnewLikes);
 
                     new giveRep(mContext,null, -1, userID.getText().toString());
 
                 }
                 else {
                     likesList.add(postIDTV.getText().toString());
-                    postRef.child(postIDTV.getText().toString()).child("mLikes").setValue(currentLikes + 1);
+                    postRef.child(postIDTV.getText().toString()).child("mLikes").setValue(post.getmLikes() + 1);
                     Log.i(mAuth.getCurrentUser().getUid(),"");
                     likesRef.child(mAuth.getCurrentUser().getUid()).child(postIDTV.getText().toString()).setValue("");
+
+                    String strnewLikes = String.valueOf(currentLikes + 1);
+                    likeButton.setText(strnewLikes);
 
                     new giveRep(mContext, null, 1, userID.getText().toString());
                 }

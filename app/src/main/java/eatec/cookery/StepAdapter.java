@@ -1,10 +1,7 @@
 package eatec.cookery;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,11 +49,11 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder>{
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                step step = dataSnapshot.getValue(step.class);
-                String key = dataSnapshot.getKey();
-                int index = mKeys.indexOf(key);
-                mSteps.set(index, step);
-                notifyDataSetChanged();
+            step step = dataSnapshot.getValue(step.class);
+            String key = dataSnapshot.getKey();
+            int index = mKeys.indexOf(key);
+            mSteps.set(index, step);
+            notifyDataSetChanged();
         }
 
         @Override
@@ -81,14 +78,12 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder>{
 
         private Button saveChangesButton;
 
-        private TextView stepShortDescriptionTextView;
+        public TextView stepShortDescriptionTextView, stepIDTV;
 
         public ViewHolder(View itemView) {
             super(itemView);
             stepShortDescription = (EditText) itemView.findViewById(R.id.stepRecipeShortText);
-
-            saveChangesButton = (Button) itemView.findViewById(R.id.saveChangesButton);
-
+            stepIDTV = (TextView) itemView.findViewById(R.id.stepFragStepID);;
             stepShortDescriptionTextView = (TextView) itemView.findViewById(R.id.stepRecipeShortTextTV);
         }
     }
@@ -109,52 +104,18 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder>{
         final step step = mSteps.get(position);
         final String stepID = step.getStepID();
 
-        final EditText shortD = holder.stepShortDescription;
-        final TextView shortDTextView = holder.stepShortDescriptionTextView;
+        TextView stepIDTextView = holder.stepIDTV;
+        stepIDTextView.setText(stepID);
 
-        Button save = holder.saveChangesButton;
+        final EditText shortD = holder.stepShortDescription;
 
         shortD.setText(step.getStepDescription());
-        final String oldString = shortD.getText().toString();
-
-        shortD.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(oldString.equals(shortD.getText().toString())) {
-
-                }
-                else {
-                    shortDTextView.setTextColor(Color.RED);
-                }
-
-            }
-        });
-        //Save button;
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newShortD = shortD.getText().toString();
-
-                shortDTextView.setTextColor(Color.DKGRAY);
-
-                stepsRef.child(stepID).child("stepDescription").setValue(newShortD);
-            }
-        });
     }
 
     @Override
     public int getItemCount() {
         return mSteps.size();
     }
+
 
 }

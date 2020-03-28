@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -55,11 +56,13 @@ public class CommentPost extends AppCompatActivity {
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         postID = getIntent().getStringExtra("postID");
 
+        //ensure that the textfield appears with the keyboard
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         commentButton = findViewById(R.id.CPostCommentButton);
         commentTextBox = findViewById(R.id.CPostCommentContainer);
 
         postImage = findViewById(R.id.CPostImageView);
-
         commentRecycler = findViewById(R.id.CPostRView);
 
         postOwnerPP = findViewById(R.id.commentOwnerPP);

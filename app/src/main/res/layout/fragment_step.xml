@@ -29,26 +29,25 @@
             android:layout_height="match_parent"
             android:layout_marginTop="4dp">
 
-            <Button
-                android:id="@+id/saveChangesButton"
-                style="@style/Widget.AppCompat.Button.Borderless"
+            <TextView
+                android:id="@+id/stepFragStepID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="16dp"
-                android:text="Save Changes"
-                android:textColor="@color/AccentGenericButtonColor"
+                android:text="TextView"
+                android:textColor="@android:color/white"
+                android:textSize="8sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/stepRecipeShortText" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/stepRecipeShortText"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:backgroundTint="@color/AccentGenericButtonColor"
+                android:backgroundTint="@color/colorAccent"
                 android:ems="10"
                 android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -61,6 +60,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Step Description"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

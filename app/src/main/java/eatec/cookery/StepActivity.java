@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -22,7 +21,6 @@ public class StepActivity extends AppCompatActivity {
     private DatabaseReference stepsRef;
     private String recipeID;
     private StepAdapter stepAdapter;
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +52,7 @@ public class StepActivity extends AppCompatActivity {
         String stepID = stepsRef.push().getKey();
         step newStep = new step(recipeID, stepID, "stepImage", "","");
         stepsRef.child(stepID).setValue(newStep);
+        saveSteps();
     }
     @Override
     protected void onStart() {
@@ -61,11 +60,18 @@ public class StepActivity extends AppCompatActivity {
     }
 
     public void finishCreating(View view) {
-        //give xp
-        mAuth = FirebaseAuth.getInstance();
-        String UID = mAuth.getCurrentUser().getUid();
-        new giveRep(this, "Recipe added: 1 reputation gained!", 1, UID);
+        saveSteps();
         finish();
 
+    }
+
+    public void saveSteps() {
+        //Iterate through each step and save them.
+        //Called twice, when the user adds a new step, and when the user is done creating the recipe.
+        for(int j = 0; viewStepsList.getChildCount() > j; j++) {
+            StepAdapter.ViewHolder holder = (StepAdapter.ViewHolder) viewStepsList.getChildViewHolder(viewStepsList.getChildAt(j));
+            assert holder != null;
+            stepsRef.child(holder.stepIDTV.getText().toString()).child("stepDescription").setValue(holder.stepShortDescription.getText().toString());
+        }
     }
 }
