@@ -3,7 +3,6 @@ package eatec.cookery;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -61,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private String upload;
     private String postID;
     private Uri mImageUri;
+    private boolean hasUploaded = false;
     private ProgressBar mProgressSpinner;
 
     @Override
@@ -150,10 +150,14 @@ public class MainActivity extends AppCompatActivity {
         if(!postContainer.getText().toString().equals("")) {
             String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date());
             Posts post;
-            if(upload.equals("")) {
+            if(!hasUploaded) {
                 post = new Posts(mAuth.getUid(), postContainer.getText().toString(), null, null,0, currentDateTimeString);
             } else {
-                post = new Posts(mAuth.getUid(), postContainer.getText().toString(), upload, null,0, currentDateTimeString);
+                if(upload.equals("")) {
+                    post = new Posts(mAuth.getUid(), postContainer.getText().toString(), null, null,0, currentDateTimeString);
+                } else {
+                    post = new Posts(mAuth.getUid(), postContainer.getText().toString(), upload, null,0, currentDateTimeString);
+                }
             }
             posts.child(postID).setValue(post);
             postContainer.setText("");
@@ -164,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
         addImageButton.setText("Image");
         addImageButton.setTextSize(14);
         upload = "";
+        hasUploaded = true;
         postID = posts.push().getKey();
     }
     public void openCreatorActivity(View view) {
