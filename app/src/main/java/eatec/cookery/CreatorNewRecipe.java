@@ -61,6 +61,7 @@ public class CreatorNewRecipe extends AppCompatActivity {
     private Uri mImageUri;
     private ImageView uploadRecipeImageButton;
     private ProgressBar mProgressSpinner;
+    private int reports;
 
     //edit Texts
     private EditText rName, rDescription;
@@ -311,12 +312,11 @@ public class CreatorNewRecipe extends AppCompatActivity {
     }
     protected void addToDatabase(String recipeName, String recipeDescription, String strTagList){
         recipe newRecipe;
-        //add to database
         if(eRecipeID != null) {
-            newRecipe = new recipe(eRecipeID, mAuth.getCurrentUser().getUid(), recipeName, recipeDescription, strTagList, "private", upload);
+            newRecipe = new recipe(eRecipeID, mAuth.getCurrentUser().getUid(), recipeName, recipeDescription, strTagList, "private", upload,eRecipe.getReports());
             recipeDatabase.child(eRecipeID).setValue(newRecipe);
         } else {
-            newRecipe = new recipe(recipeID, mAuth.getCurrentUser().getUid(), recipeName, recipeDescription, strTagList, "private", upload);
+            newRecipe = new recipe(recipeID, mAuth.getCurrentUser().getUid(), recipeName, recipeDescription, strTagList, "private", upload,0);
             recipeDatabase.child(recipeID).setValue(newRecipe);
             String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date());
             Posts post = new Posts(mAuth.getUid(),recipeDescription, upload, recipeID, 0, currentDateTimeString);

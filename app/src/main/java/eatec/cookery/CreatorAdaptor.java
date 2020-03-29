@@ -31,6 +31,7 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
     private List<recipe> mRecipes;
     private ArrayList<String> mKeys = new ArrayList<>();
     private DatabaseReference recipeRef;
+    private DatabaseReference postsRef;
     private DatabaseReference stepsRef;
     private Context mContext;
     private FirebaseAuth mAuth;
@@ -40,6 +41,7 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
         mAuth = FirebaseAuth.getInstance();
         recipeRef = FirebaseDatabase.getInstance().getReference().child("recipes");
         stepsRef = FirebaseDatabase.getInstance().getReference().child("steps");
+        postsRef = FirebaseDatabase.getInstance().getReference().child("posts");
         Query recipeQuery = recipeRef.orderByChild("userID").equalTo(mAuth.getCurrentUser().getUid());
         recipeQuery.addChildEventListener(new CreatorAdaptor.RecipeChildEventListener());
     }
@@ -93,7 +95,7 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
 
         private TextView mRecipeTitle;
         private TextView mRecipeDescription;
-        private ImageView mRowImage;
+        private ImageView mRowImage, mrecipeReported;
         private CardView mCard;
 
         private LinearLayout mButtons;
@@ -106,7 +108,7 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
             mRecipeDescription = (TextView) itemView.findViewById(R.id.descriptionText);
             mRowImage = (ImageView) itemView.findViewById(R.id.rowImage);
             mCard = (CardView) itemView.findViewById(R.id.recipeCard);
-
+            mrecipeReported = itemView.findViewById(R.id.recipeReportedImage);
             mButtons = (LinearLayout) itemView.findViewById(R.id.cardButtonsLayout);
             mEditButton = (Button) itemView.findViewById(R.id.editButton);
             mDeleteButton = (Button) itemView.findViewById(R.id.deleteButton);
@@ -140,6 +142,11 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
             }
         });
 
+        ImageView reportedRecipe = holder.mrecipeReported;
+        if(recipe.getReports() >= 5) {
+            reportedRecipe.setVisibility(View.VISIBLE);
+        }
+
         LinearLayout buttonsContainer = holder.mButtons;
         buttonsContainer.setVisibility(View.VISIBLE);
 
@@ -165,7 +172,23 @@ public class CreatorAdaptor extends RecyclerView.Adapter<CreatorAdaptor.ViewHold
 
                     }
                 });
+                //remove the posts
+                Query postsQuery = postsRef.orderByChild("mRecipeID").equalTo(recipe.getRecipeID());
+                postsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postsSnapshot: dataSnapshot.getChildren()) {
+                            Posts post = postsSnapshot.getValue(Posts.class);
+                            if(post.getmRecipeID().equals(recipe.getRecipeID())) {
+                                postsSnapshot.getRef().removeValue();
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
+                    }
+                });
             }
         });
 

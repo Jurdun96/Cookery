@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -226,9 +225,19 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
                 if(likesList.contains(postIDTV.getText().toString())) {
                     likesList.remove(postIDTV.getText().toString());
                     likesRef.child(mAuth.getCurrentUser().getUid()).child(postIDTV.getText().toString()).removeValue();
-                    Log.i("LIKES","+");
-                    postRef.child(postIDTV.getText().toString()).child("mLikes").setValue(downvote);
+                    //change server side
+                    postRef.child(postIDTV.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Posts post = dataSnapshot.getValue(Posts.class);
+                            postRef.child(postIDTV.getText().toString()).child("mLikes").setValue(post.getmLikes() - 1);
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
+                        }
+                    });
+                    //change client side
                     String strnewLikes = String.valueOf(downvote);
                     likeButton.setText(strnewLikes);
 
@@ -237,10 +246,20 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
                 }
                 else {
                     likesList.add(postIDTV.getText().toString());
-                    postRef.child(postIDTV.getText().toString()).child("mLikes").setValue(upvote);
-                    Log.i(mAuth.getCurrentUser().getUid(),"");
                     likesRef.child(mAuth.getCurrentUser().getUid()).child(postIDTV.getText().toString()).setValue("");
+                    //change server side
+                    postRef.child(postIDTV.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Posts post = dataSnapshot.getValue(Posts.class);
+                            postRef.child(postIDTV.getText().toString()).child("mLikes").setValue(post.getmLikes() + 1);
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
+                        }
+                    });
+                    //change client side
                     String strnewLikes = String.valueOf(upvote);
                     likeButton.setText(strnewLikes);
 
@@ -264,8 +283,10 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
         dateTime.setText(post.getmDateTime());
         Picasso.get().load(post.getmImage()).into(postImage);
 
+
+
         Query query = userRef.child(post.getmUserID());
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 user user = dataSnapshot.getValue(user.class);

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -42,6 +43,11 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
     private DatabaseReference userRef;
     private DatabaseReference favRef;
 
+    private DatabaseReference reportsRef;
+        private List<String> reportsList = new ArrayList<>();
+
+    private DatabaseReference recipeRef;
+
     public RecipeAdaptor(List<recipe> recipes, Query query, String strTagList, EditText searchBar){
         mRecipes = recipes;
         mQuery = query;
@@ -51,6 +57,9 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
 
         userRef = FirebaseDatabase.getInstance().getReference("users");
         favRef = FirebaseDatabase.getInstance().getReference("favourites").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        reportsRef = FirebaseDatabase.getInstance().getReference("reports").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        recipeRef = FirebaseDatabase.getInstance().getReference("recipes");
+
         favRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -61,6 +70,20 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+
+        reportsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot reports: dataSnapshot.getChildren()) {
+                    reportsList.add(reports.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         mQuery.addChildEventListener(new RecipeAdaptor.RecipeChildEventListener());
     }
 
@@ -68,48 +91,49 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             final recipe recipe = dataSnapshot.getValue(recipe.class);
+            //if this recipe has now reaached the capped amount of reports, then it is not shown and removed from the database.
+            if(recipe.getReports() <= 5) {
+                //User search??
+                if(mSearchBar.getText().toString().contains("@")) {
+                    Query query = userRef.orderByKey().equalTo(recipe.getUserID());
 
-            //User search??
-            if(mSearchBar.getText().toString().contains("@")) {
-                Query query = userRef.orderByKey().equalTo(recipe.getUserID());
+                    final String newSearchBar = mSearchBar.getText().toString().replace("@","");
 
-                final String newSearchBar = mSearchBar.getText().toString().replace("@","");
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                                user user = userSnapshot.getValue(user.class);
+                                if(user.getUserName().toLowerCase().contains(newSearchBar.toLowerCase())) {
+                                    Log.i("2", user.getUserName().toLowerCase());
+                                    Log.i("2", newSearchBar.toLowerCase());
+                                    mRecipes.add(recipe);
+                                    notifyDataSetChanged();
 
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
-                            user user = userSnapshot.getValue(user.class);
-                            if(user.getUserName().toLowerCase().contains(newSearchBar.toLowerCase())) {
-                                Log.i("2", user.getUserName().toLowerCase());
-                                Log.i("2", newSearchBar.toLowerCase());
-                                mRecipes.add(recipe);
-                                notifyDataSetChanged();
-
-                                String key = dataSnapshot.getKey();
-                                mKeys.add(key);
+                                    String key = dataSnapshot.getKey();
+                                    mKeys.add(key);
+                                }
                             }
-                            else {}
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
-            }
-            //Normal Search??
-            else {
-                if (mTagList.toLowerCase().contains(recipe.getTags().toLowerCase())) {
-                    if (recipe.getRecipeName().toLowerCase().contains(mSearchBar.getText().toString().toLowerCase())
-                            || recipe.getRecipeDescription().toLowerCase().contains(mSearchBar.getText().toString().toLowerCase()))
-                    {
-                        mRecipes.add(recipe);
-                        notifyDataSetChanged();
+                        }
+                    });
+                }
+                //Normal Search??
+                else {
+                    if (mTagList.toLowerCase().contains(recipe.getTags().toLowerCase())) {
+                        if (recipe.getRecipeName().toLowerCase().contains(mSearchBar.getText().toString().toLowerCase())
+                                || recipe.getRecipeDescription().toLowerCase().contains(mSearchBar.getText().toString().toLowerCase()))
+                        {
+                            mRecipes.add(recipe);
+                            notifyDataSetChanged();
 
-                        String key = dataSnapshot.getKey();
-                        mKeys.add(key);
+                            String key = dataSnapshot.getKey();
+                            mKeys.add(key);
+                        }
                     }
                 }
             }
@@ -118,13 +142,15 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             recipe recipe = dataSnapshot.getValue(recipe.class);
-            String key = dataSnapshot.getKey();
+            if(recipe.getReports() <= 5) {
+                String key = dataSnapshot.getKey();
 
-            int index = mKeys.indexOf(key);
+                int index = mKeys.indexOf(key);
 
-            mRecipes.set(index, recipe);
+                mRecipes.set(index, recipe);
 
-            notifyDataSetChanged();
+                notifyDataSetChanged();
+            }
         }
 
         @Override
@@ -197,6 +223,36 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
         //Favourite a recipe so that it appears in the users favourite tab
         final Button favButton = holder.favouriteButton;
         final Button unFavButton = holder.unfavouriteButton;
+        final Button reportButton = holder.reportButton;
+
+        //report button functionality
+        //Clicking the report button will first check if the user has already reported this recipe.
+        //If it has not then it will add the recipe to this users list of reports, and increment the reports number on this recipe by 1.
+        reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(reportsList.contains(recipe.getRecipeID())) {
+                    Toast.makeText(mContext, "You have already reported this recipe!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Query query = recipeRef.child(recipe.getRecipeID());
+                    reportsRef.child(recipe.getRecipeID()).setValue(recipe.getRecipeName());
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            recipe recipe1 = dataSnapshot.getValue(recipe.class);
+                            int reports = recipe1.getReports();
+                            int nreport = reports + 1;
+                            recipeRef.child(recipe.getRecipeID()).child("reports").setValue(nreport);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+        });
 
         //check if this recipe is already a favourite of this user
         if(favouritesList.contains(recipe.getRecipeID())) {

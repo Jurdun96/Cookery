@@ -1,16 +1,27 @@
 package eatec.cookery;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.OpenableColumns;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +29,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -33,13 +48,21 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference posts;
     private DatabaseReference Users;
-    private Button postButton;
+    private Button postButton,addImageButton;
     private EditText postContainer;
     private String UID;
+    private StorageReference mStorageRef;
 
     private MainAdaptor mainAdaptor;
     private RecyclerView listPostsView;
     private List<Posts> listPosts;
+
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private String upload;
+    private String postID;
+    private Uri mImageUri;
+    private ProgressBar mProgressSpinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,12 +70,24 @@ public class MainActivity extends AppCompatActivity {
 
         //Highlight the home buttons to indicated current page;
         highlightMenuIcon();
-
+        mProgressSpinner = findViewById(R.id.mainAProgressBar);
+        mStorageRef = FirebaseStorage.getInstance().getReference("postImages");
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
+
         posts = database.getReference("posts");
+
         if (mAuth.getCurrentUser() != null) {getUserDetails();}
 
+        postID = posts.push().getKey();
+
+        addImageButton = findViewById(R.id.postAddImageButton);
+        addImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFileChooser();
+            }
+        });
         postButton = findViewById(R.id.postButton);
         postContainer = findViewById(R.id.postEditText);
         postButton.setOnClickListener(new View.OnClickListener() {
@@ -114,14 +149,22 @@ public class MainActivity extends AppCompatActivity {
     public void postUpdate() {
         if(!postContainer.getText().toString().equals("")) {
             String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date());
-            Posts post = new Posts(mAuth.getUid(), postContainer.getText().toString(), null, null,0, currentDateTimeString);
-            posts.push().setValue(post);
+            Posts post;
+            if(upload.equals("")) {
+                post = new Posts(mAuth.getUid(), postContainer.getText().toString(), null, null,0, currentDateTimeString);
+            } else {
+                post = new Posts(mAuth.getUid(), postContainer.getText().toString(), upload, null,0, currentDateTimeString);
+            }
+            posts.child(postID).setValue(post);
             postContainer.setText("");
         }
         else {
             Toast.makeText(this, "You cannot post an empty update.", Toast.LENGTH_SHORT).show();
         }
-
+        addImageButton.setText("Image");
+        addImageButton.setTextSize(14);
+        upload = "";
+        postID = posts.push().getKey();
     }
     public void openCreatorActivity(View view) {
         startActivity(new Intent(MainActivity.this, CreatorActivity.class));
@@ -145,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(0,0);
         finish();
     }
-
     public void highlightMenuIcon() {
         ImageView socialButton = findViewById(R.id.socialButton);
         socialButton.setImageResource(R.drawable.friends);
@@ -162,7 +204,6 @@ public class MainActivity extends AppCompatActivity {
         ImageView myRecipesButton = findViewById(R.id.myRecipesButton);
         myRecipesButton.setImageResource(R.drawable.book);
     }
-
     public void openLoginActivity(View view) {
         if(currentUser != null) {
             startActivity(new Intent(MainActivity.this, ProfileActivity.class));
@@ -185,6 +226,79 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         currentUser = mAuth.getCurrentUser();
+    }
+
+    private void openFileChooser() {
+        //Open file explorer for user to upload an image of themselves
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null){
+            //Check if everything is okay, and then set the local path of the image as the URI
+            mImageUri = data.getData();
+            //show progress spinner
+            mProgressSpinner.setVisibility(View.VISIBLE);
+            //Get the Size of the image
+            Cursor returnCursor = getContentResolver().query(mImageUri,null,null,null,null);
+            int imageSize = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+            returnCursor.moveToFirst();
+
+            if(returnCursor.getLong(imageSize) > 5000000) //Profile Picture size limit
+            {
+                //Fail, upload aborted
+                Toast.makeText(this, "5MB Maximum upload", Toast.LENGTH_LONG).show();
+            } else {
+                //Continue with upload
+                uploadFile();
+            }
+
+        }
+    }
+    private String getFileExtension(Uri uri){
+        //get the file extension used.
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+    private void uploadFile() {
+        if(mImageUri != null) {
+            final StorageReference fileReference = mStorageRef.child(postID + "." + getFileExtension(mImageUri));
+            addImageButton.setText(fileReference.toString());
+            addImageButton.setTextSize(8);
+            fileReference.putFile(mImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            //add a wait on the progress bar of 0.2 seconds so that the user can notice it
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mProgressSpinner.setVisibility(View.INVISIBLE);
+                                }
+                            }, 200);
+                            Toast.makeText(MainActivity.this, "Upload Successful", Toast.LENGTH_LONG).show();
+                            //convert uri to string
+                            upload = taskSnapshot.getDownloadUrl().toString();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                }
+            });
+        } else {
+            Toast.makeText(this,"No file Selected", Toast.LENGTH_SHORT).show();
+        }
     }
 }
 

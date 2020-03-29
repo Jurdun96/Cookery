@@ -12,10 +12,11 @@ public class recipe {
     private String tags;
     private String privacy;
     private String recipeImage;
+    private int reports;
 
     public recipe() {}
 
-    public recipe(String recipeID, String userID, String recipeName, String recipeDescription, String tags, String privacy, String recipeImage) {
+    public recipe(String recipeID, String userID, String recipeName, String recipeDescription, String tags, String privacy, String recipeImage, int reports) {
         this.recipeID = recipeID;
         this.userID = userID;
         this.recipeName = recipeName;
@@ -23,32 +24,28 @@ public class recipe {
         this.tags = tags;
         this.privacy = privacy;
         this.recipeImage = recipeImage;
+        this.reports = reports;
     }
 
     public String getRecipeID() {
         return recipeID;
     }
-
     public String getUserID() {
         return userID;
     }
-
     public String getRecipeName() {
         return recipeName;
     }
-
     public String getRecipeDescription() {
         return recipeDescription;
     }
-
     public String getRecipeImage() {
         return recipeImage;
     }
-
+    public int getReports() {return reports;}
     public String getTags() {
         return tags;
     }
-
     public String getPrivacy() {
         return privacy;
     }
