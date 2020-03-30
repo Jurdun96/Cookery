@@ -141,16 +141,6 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            recipe recipe = dataSnapshot.getValue(recipe.class);
-            if(recipe.getReports() <= 5) {
-                String key = dataSnapshot.getKey();
-
-                int index = mKeys.indexOf(key);
-
-                mRecipes.set(index, recipe);
-
-                notifyDataSetChanged();
-            }
         }
 
         @Override

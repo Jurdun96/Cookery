@@ -205,7 +205,6 @@ public class ProfileActivity extends AppCompatActivity {
                         .noPlaceholder()
                         .transform(new CropCircleTransformation())
                         .into(profilePicture);
-                //TODO biography text
             }
 
             @Override

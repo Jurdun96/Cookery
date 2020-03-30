@@ -223,8 +223,6 @@ public class CreatorNewRecipe extends AppCompatActivity {
         String recipeDescription = rDescription.getText().toString();
         Spinner privacySpinner = findViewById(R.id.privacySpinner);
         //TODO privacy spinner
-        //TODO upload image
-
         StringBuilder strTaglistBuilder = new StringBuilder();
         //if tags is empty, then a field is still added
         if (tags.isEmpty()) {
@@ -270,7 +268,6 @@ public class CreatorNewRecipe extends AppCompatActivity {
     }
     public void tagsCheckbox(View view) {
         boolean checked = ((CheckBox) view).isChecked();
-        //TODO add a clear button to clear all selections
         switch(view.getId()) {
             case R.id.veganCheck:
                 if(checked)
