@@ -1,5 +1,6 @@
 package eatec.cookery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -40,7 +41,6 @@ public class createAccountActivity extends AppCompatActivity {
         followingDatabase = FirebaseDatabase.getInstance().getReference("following");
         likesDatabase = FirebaseDatabase.getInstance().getReference("likes");
         favouritesDatabase = FirebaseDatabase.getInstance().getReference("favourites");
-
         //get usernames to check if they are present or not
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -84,6 +84,8 @@ public class createAccountActivity extends AppCompatActivity {
                         String userID = mAuth.getCurrentUser().getUid();
                         //create and link account in database to authentication details.
                         addDetailsToDatabase(userID, email, "path/default", username, cookeryRank);
+                        startActivity(new Intent(createAccountActivity.this, MainActivity.class));
+                        overridePendingTransition(0,0);
                         finish();
                     } else {
                         // If sign in fails, display a message to the user.
