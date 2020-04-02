@@ -189,6 +189,7 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.ViewHolder
         mUserIDTextView.setText(user.getUserID());
         Picasso.get().load(user.getProfilePicture())
                 .transform(new CropCircleTransformation())
+                .placeholder(R.drawable.ic_account_circle_black_24dp)
                 .into(mImageView);
     }
 

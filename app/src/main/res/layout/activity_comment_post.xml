@@ -7,6 +7,50 @@
     android:background="@android:color/white"
     tools:context=".CommentPost">
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/CPostCommentButton"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comment"
+                android:textColor="@color/genericButtonColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/CPostCommentContainer"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:background="@android:color/white"
+                android:ems="10"
+                android:hint="Comment..."
+                android:inputType="textPersonName"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/CPostCommentButton"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/commentOwnerContainer"
         android:layout_width="match_parent"
@@ -91,66 +135,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@android:color/white"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout8"
+        app:layout_constraintBottom_toTopOf="@+id/cardView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView5"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout8"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/cardView4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/CPostCommentButton"
-                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Comment"
-                    android:textColor="@color/genericButtonColor"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <EditText
-                    android:id="@+id/CPostCommentContainer"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="16dp"
-                    android:background="@android:color/white"
-                    android:ems="10"
-                    android:hint="Comment..."
-                    android:inputType="textPersonName"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/CPostCommentButton"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
-            </android.support.constraint.ConstraintLayout>
-
-        </android.support.v7.widget.CardView>
-    </android.support.constraint.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/cardView5" />
 
 </android.support.constraint.ConstraintLayout>

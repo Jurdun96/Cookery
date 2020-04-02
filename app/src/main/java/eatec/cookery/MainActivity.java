@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 user user = dataSnapshot.child(UID).getValue(user.class);
                 Picasso.get()
                         .load(user.getProfilePicture())
-                        .placeholder(R.drawable.user)
+                        .placeholder(R.drawable.ic_account_circle_black_24dp)
                         .transform(new CropCircleTransformation())
                         .into(userImage);
             }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -35,8 +36,10 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
     private DatabaseReference likesRef;
     private DatabaseReference userRef;
     private DatabaseReference postRef;
+    private DatabaseReference followingRef;
 
     private List<String> likesList;
+    private List<String> followList;
     private FirebaseAuth mAuth;
 
     public MainAdaptor(List<Posts> posts){
@@ -45,9 +48,23 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
         likesRef = FirebaseDatabase.getInstance().getReference("likes");
         userRef = FirebaseDatabase.getInstance().getReference("users");
         postRef =  FirebaseDatabase.getInstance().getReference("posts");
+        followingRef = FirebaseDatabase.getInstance().getReference("following");
         likesList = new ArrayList<>();
+        followList = new ArrayList<>();
+        followingRef.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot children : dataSnapshot.getChildren()) {
+                    followList.add(children.getKey());
+                }
+            }
 
-        Query  query = postRef.orderByChild("mDateTime").limitToFirst(25);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        Query  query = postRef.limitToLast(25);
         query.addChildEventListener(new MainAdaptor.MainChildEventListener());
     }
 
@@ -55,24 +72,16 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             Posts post = dataSnapshot.getValue(Posts.class);
-            String key = dataSnapshot.getKey();
-
-            mPosts.add(post);
-            mKeys.add(key);
-
-            notifyDataSetChanged();
+            if(followList.contains(post.getmUserID())) {
+                String key = dataSnapshot.getKey();
+                mPosts.add(post);
+                mKeys.add(key);
+                notifyDataSetChanged();
+            }
         }
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//            Posts post = dataSnapshot.getValue(Posts.class);
-//            String key = dataSnapshot.getKey();
-//
-//            int index = mKeys.indexOf(key);
-//
-//            mPosts.set(index, post);
-//
-//            notifyDataSetChanged();
         }
 
         @Override
@@ -109,7 +118,8 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
                 mContentImage;
 
         private Button mLikeButton,
-                mCommentButton;
+                mCommentButton,
+                mShareButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -130,6 +140,7 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
 
             mLikeButton = itemView.findViewById(R.id.likePostButton);
             mCommentButton = itemView.findViewById(R.id.commentPostButton);
+            mShareButton = itemView.findViewById(R.id.sharePostButton);
         }
     }
 
@@ -160,7 +171,13 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
                 }
             });
         }
-
+        Button shareBut = holder.mShareButton;
+        shareBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext, "No Action", Toast.LENGTH_SHORT).show();
+            }
+        });
         TextView postContent = holder.mContentTextView;
         final TextView userID = holder.mUserIDTv;
         final TextView postIDTV = holder.mPostIDTV;
@@ -290,7 +307,7 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 user user = dataSnapshot.getValue(user.class);
-                Picasso.get().load(user.getProfilePicture()).transform(new CropCircleTransformation()).into(userImage);
+                Picasso.get().load(user.getProfilePicture()).placeholder(R.drawable.ic_account_circle_black_24dp).transform(new CropCircleTransformation()).into(userImage);
                 username.setText(user.getUserName());
             }
 

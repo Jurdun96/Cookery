@@ -80,7 +80,12 @@ public class CommentPost extends AppCompatActivity {
                 //get the posts creators id
                 postOwnerID = post.getmUserID();
                 //Set the time and data of post
-                postTime.setText(post.getmDateTime());
+                if(post.getmImage()==null){
+                    postTime.setText(post.getmContent());
+                } else {
+                    postTime.setText(post.getmDateTime());
+                }
+
                 //if the post has an image show the imageview and load the posts image into it
                 if(post.getmImage() != null) {
                     postImage.setVisibility(View.VISIBLE);
@@ -103,7 +108,7 @@ public class CommentPost extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         postOwnerUser = dataSnapshot.getValue(user.class);
-                        Picasso.get().load(postOwnerUser.getProfilePicture()).transform(new CropCircleTransformation()).into(postOwnerPP);
+                        Picasso.get().load(postOwnerUser.getProfilePicture()).placeholder(R.drawable.ic_account_circle_black_24dp).transform(new CropCircleTransformation()).into(postOwnerPP);
                         postOwnerPP.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

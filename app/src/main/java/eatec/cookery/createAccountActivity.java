@@ -112,7 +112,9 @@ public class createAccountActivity extends AppCompatActivity {
         //add that user object to the database
         database.child(userID).setValue(newUser);
         followingDatabase.child(userID).child("Maao6NbuS2fzbhTMgpVLJkU02Df1").setValue("Cookery");
+        followingDatabase.child(userID).child("Default").setValue("Default");
         favouritesDatabase.child(userID).child("Default").setValue("Default");
+        likesDatabase.child(userID).child("Default").setValue("Default");
 
     }
 }

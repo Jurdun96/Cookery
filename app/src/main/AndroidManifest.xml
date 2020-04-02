@@ -14,7 +14,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".CommentPost"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".ViewUserProfile"
             android:theme="@style/AppTheme.NoActionBar"

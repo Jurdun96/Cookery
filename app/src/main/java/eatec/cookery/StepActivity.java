@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,7 +31,13 @@ public class StepActivity extends AppCompatActivity {
         stepsRef = FirebaseDatabase.getInstance().getReference("steps");
         //pass recipeID;
         recipeID = getIntent().getStringExtra("recipeID");
-
+        Button timerButton = (Button) findViewById(R.id.addTimerButton);
+        timerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(StepActivity.this, "No Action", Toast.LENGTH_SHORT).show();
+            }
+        });
         //init everything for stepView
         listStepsList = new ArrayList<>();
         stepAdapter = new StepAdapter(listStepsList, recipeID);

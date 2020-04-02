@@ -77,7 +77,6 @@ public class ViewUserProfile extends AppCompatActivity {
         followingRef = FirebaseDatabase.getInstance().getReference("following");
         reportsRef = FirebaseDatabase.getInstance().getReference("reports");
 
-
         //init lists
         usersList = new ArrayList<>();
 
@@ -87,7 +86,11 @@ public class ViewUserProfile extends AppCompatActivity {
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reportUser();
+                if(user.getUserID().equals("Maao6NbuS2fzbhTMgpVLJkU02Df1")) {
+                    Toast.makeText(ViewUserProfile.this, "You cannot report this account", Toast.LENGTH_SHORT).show();
+                } else {
+                    reportUser();
+                }
             }
         });
         recipesButton.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +131,7 @@ public class ViewUserProfile extends AppCompatActivity {
                 Picasso.get()
                         .load(user.getProfilePicture())
                         .transform(new CropCircleTransformation())
-                        .noPlaceholder()
+                        .placeholder(R.drawable.ic_account_circle_black_24dp)
                         .into(ppImage);
             }
 
@@ -192,16 +195,24 @@ public class ViewUserProfile extends AppCompatActivity {
 
             }
         });
-
     }
 
     public void followUser(View view) {
-        followingRef.child(currentUserUID).child(UID).setValue(user.getUserName());
-        clearUserList();
+        if(user.getUserID().equals("Maao6NbuS2fzbhTMgpVLJkU02Df1")) {
+            Toast.makeText(ViewUserProfile.this, "You cannot unfollow this account", Toast.LENGTH_SHORT).show();
+        } else {
+            followingRef.child(currentUserUID).child(UID).setValue(user.getUserName());
+            clearUserList();
+        }
     }
     public void unFollowUser(View view){
-        followingRef.child(currentUserUID).child(UID).removeValue();
-        clearUserList();
+        if(user.getUserID().equals("Maao6NbuS2fzbhTMgpVLJkU02Df1")) {
+            Toast.makeText(ViewUserProfile.this, "You cannot unfollow this account", Toast.LENGTH_SHORT).show();
+        } else {
+            followingRef.child(currentUserUID).child(UID).removeValue();
+            clearUserList();
+        }
+
     }
     public void clearUserList() {
         usersList.clear();
