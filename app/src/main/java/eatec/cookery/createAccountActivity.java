@@ -104,6 +104,10 @@ public class createAccountActivity extends AppCompatActivity {
             Toast.makeText(createAccountActivity.this, "Username Taken", Toast.LENGTH_SHORT).show();
             return false;
         } else {
+            if(username.contains(" ")){
+                Toast.makeText(this, "Username cannot contain a space", Toast.LENGTH_SHORT).show();
+                return false;
+            }
             return true;
         }
     }
