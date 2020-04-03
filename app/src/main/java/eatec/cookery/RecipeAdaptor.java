@@ -92,7 +92,7 @@ public class RecipeAdaptor extends RecyclerView.Adapter<RecipeAdaptor.ViewHolder
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             final recipe recipe = dataSnapshot.getValue(recipe.class);
             //if this recipe has now reaached the capped amount of reports, then it is not shown and removed from the database.
-            if(recipe.getReports() <= 5) {
+            if(recipe.getReports() <= 5 || !recipe.getTags().contains("private")) {
                 //User search??
                 if(mSearchBar.getText().toString().contains("@")) {
                     Query query = userRef.orderByKey().equalTo(recipe.getUserID());

@@ -58,12 +58,12 @@ public class MainAdaptor extends RecyclerView.Adapter<MainAdaptor.ViewHolder> {
                     followList.add(children.getKey());
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+
         Query  query = postRef.limitToLast(25);
         query.addChildEventListener(new MainAdaptor.MainChildEventListener());
     }

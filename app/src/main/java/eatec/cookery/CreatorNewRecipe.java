@@ -18,7 +18,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +62,7 @@ public class CreatorNewRecipe extends AppCompatActivity {
     private ImageView uploadRecipeImageButton;
     private ProgressBar mProgressSpinner;
     private int reports;
-
+    private Switch privacySwitch;
     //edit Texts
     private EditText rName, rDescription;
     @Override
@@ -70,6 +70,7 @@ public class CreatorNewRecipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creator_new_recipe);
 
+        privacySwitch = findViewById(R.id.privacySwtich);
         eRecipeID = getIntent().getStringExtra("recipeID");
 
         mProgressSpinner = findViewById(R.id.progressSpinner);
@@ -137,6 +138,10 @@ public class CreatorNewRecipe extends AppCompatActivity {
                         fishCheck.setChecked(true);
                         tags.add("fish");
                     }
+                    if(eRecipe.getTags().contains("private")) {
+                        privacySwitch.setChecked(true);
+                        tags.add("private");
+                    }
                 }
 
                 @Override
@@ -152,6 +157,17 @@ public class CreatorNewRecipe extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+    public void privacySwitch(View view){
+        boolean checked = ((Switch) view).isChecked();
+        switch (view.getId()){
+            case R.id.privacySwtich:
+                if(checked)
+                    tags.add("private");
+                else
+                    tags.remove("private");
+                break;
+        }
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -221,8 +237,6 @@ public class CreatorNewRecipe extends AppCompatActivity {
         //pass text views to string
         String recipeName = rName.getText().toString();
         String recipeDescription = rDescription.getText().toString();
-        Spinner privacySpinner = findViewById(R.id.privacySpinner);
-        //TODO privacy spinner
         StringBuilder strTaglistBuilder = new StringBuilder();
         //if tags is empty, then a field is still added
         if (tags.isEmpty()) {

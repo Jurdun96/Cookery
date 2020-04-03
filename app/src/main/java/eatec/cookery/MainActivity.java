@@ -27,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
+    private DatabaseReference followingRef;
+    private List<String> followingList = new ArrayList<>();
     private DatabaseReference posts;
     private DatabaseReference Users;
     private Button postButton,addImageButton;
@@ -63,11 +66,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean hasUploaded = false;
     private ProgressBar mProgressSpinner;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //Highlight the home buttons to indicated current page;
         highlightMenuIcon();
         mProgressSpinner = findViewById(R.id.mainAProgressBar);
@@ -75,7 +78,41 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
+        followingRef = database.getReference("following");
         posts = database.getReference("posts");
+        ProgressBar recyclerViewProgress;
+
+        //grab the following list, and set the adapter
+        //Doing it this way fixed the bug where the adapter would only set once the user has returned the to activity
+        //TODO find a more efficient way to get around this bug.
+        Query followingRef = this.followingRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        followingRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot users: dataSnapshot.getChildren()) {
+                    //gets the children in this tree
+                    //adds the IDs to this usersID local variable
+                    String thisUserID = users.getKey();
+                    followingList.add(thisUserID);
+
+                    //declare layout manager and insure that the newest items are at the top
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+                    layoutManager.setReverseLayout(true);
+                    layoutManager.setStackFromEnd(true);
+                    listPosts = new ArrayList<>();
+                    listPostsView = findViewById(R.id.postsRView);
+                    mainAdaptor = new MainAdaptor(listPosts);
+                    listPostsView.setHasFixedSize(true);
+                    listPostsView.setLayoutManager(layoutManager);
+                    listPostsView.setAdapter(mainAdaptor);
+                    listPostsView.setNestedScrollingEnabled(false);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         if (mAuth.getCurrentUser() != null) {getUserDetails();}
 
@@ -97,20 +134,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //declare layout manager and insure that the newest items are at the top
-        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
-
-        listPosts = new ArrayList<>();
-        listPostsView = findViewById(R.id.postsRView);
-        mainAdaptor = new MainAdaptor(listPosts);
-        listPostsView.setHasFixedSize(true);
-        listPostsView.setLayoutManager(layoutManager);
-
-        listPostsView.setAdapter(mainAdaptor);
-        listPostsView.setNestedScrollingEnabled(false);
-
         Button feedbackButton = findViewById(R.id.feedbackButton);
         feedbackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     public void getUserDetails() {
         Users = database.getReference("users");
 
@@ -209,30 +231,9 @@ public class MainActivity extends AppCompatActivity {
         ImageView myRecipesButton = findViewById(R.id.myRecipesButton);
         myRecipesButton.setImageResource(R.drawable.book);
     }
-    public void openLoginActivity(View view) {
-        if(currentUser != null) {
-            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-        } else {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        }
+    public void openProfileActivity(View view) {
+        startActivity(new Intent(MainActivity.this, ProfileActivity.class));
     }
-    @Override
-     protected void onResume() {
-        super.onResume();
-        if (currentUser != null) {
-            getUserDetails();
-            new checkStrikes(MainActivity.this);
-        }
-        else {
-            startActivity(new Intent(MainActivity.this, LoginPreActivity.class));
-        }
-    }
-    @Override
-    public void onStart() {
-        super.onStart();
-        currentUser = mAuth.getCurrentUser();
-    }
-
     private void openFileChooser() {
         //Open file explorer for user to upload an image of themselves
         Intent intent = new Intent();

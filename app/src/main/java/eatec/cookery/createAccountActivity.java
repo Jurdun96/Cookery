@@ -84,6 +84,7 @@ public class createAccountActivity extends AppCompatActivity {
                         String userID = mAuth.getCurrentUser().getUid();
                         //create and link account in database to authentication details.
                         addDetailsToDatabase(userID, email, "path/default", username, cookeryRank);
+
                         startActivity(new Intent(createAccountActivity.this, MainActivity.class));
                         overridePendingTransition(0,0);
                         finish();
@@ -114,6 +115,7 @@ public class createAccountActivity extends AppCompatActivity {
         //add that user object to the database
         database.child(userID).setValue(newUser);
         followingDatabase.child(userID).child("Maao6NbuS2fzbhTMgpVLJkU02Df1").setValue("Cookery");
+        followingDatabase.child(userID).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue("This User");
         followingDatabase.child(userID).child("Default").setValue("Default");
         favouritesDatabase.child(userID).child("Default").setValue("Default");
         likesDatabase.child(userID).child("Default").setValue("Default");

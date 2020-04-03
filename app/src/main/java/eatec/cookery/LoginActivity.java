@@ -91,9 +91,9 @@ public class LoginActivity extends AppCompatActivity {
                             //set signin fields to empty, indicating login was successful along with toast
                             objEmail.setText("");
                             objPassword.setText("");
-
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            overridePendingTransition(0,0);
                             finish();
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this, "Invalid email address or password",

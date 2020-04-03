@@ -19,6 +19,10 @@
         completions."
     </string>
     <string name="openRecipesActivity" />
+
+    <string name="admob_app_id">ca-app-pub-2132116925167984~3381638125</string>
+    <string name="ad_unit_id">ca-app-pub-2132116925167984/4311576413</string>
+
     <string name="title_activity_create_account">createAccountActivity</string>
     <string name="title_activity_social">SocialActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>

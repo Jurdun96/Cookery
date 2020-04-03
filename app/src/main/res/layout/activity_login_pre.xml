@@ -19,6 +19,15 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
         app:layout_constraintVertical_bias="1.0">
 
+        <TextView
+            android:id="@+id/signInText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Login in now to enjoy cooking with your friends"
+            android:textAlignment="center"
+            android:textSize="10sp" />
+
         <Button
             android:id="@+id/googleButton"
             style="@style/Widget.AppCompat.Button"
@@ -28,6 +37,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:background="@color/googleButtonColor"
+            android:onClick="noAction"
             android:text="CONTINUE WITH GOOGLE"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
@@ -40,28 +50,23 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:background="@color/facebookButtonColor"
+            android:onClick="noAction"
             android:text="CONTINUE WITH FACEBOOK"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/signInText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Login in now to enjoy cooking with your friends"
-            android:textAlignment="center"
-            android:textSize="10sp" />
-
-        <TextView
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="24dp"
             android:onClick="openLoginActivity"
-            android:text="LOGIN"
+            android:text="@string/title_activity_login"
             android:textAlignment="center"
+            android:textAllCaps="true"
             android:textColor="@android:color/black"
+            android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
 
